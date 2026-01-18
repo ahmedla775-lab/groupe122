@@ -9,25 +9,24 @@
 body{
   margin:0;
   font-family:system-ui;
-  background:#000; /* أسود */
+  background:#000;
   color:#fff;
   font-size:18px;
 }
 .hidden{display:none}
 header{
   padding:16px;
-  background:#222; /* داكن أكثر */
+  background:#111;
   display:flex;
   justify-content:space-between;
   align-items:center;
 }
 .container{padding:20px}
 .card{
-  background:#111; /* أسود داكن */
+  background:#111;
   border-radius:18px;
   padding:20px;
   margin-bottom:18px;
-  border:2px solid #FFD700; /* ذهبي */
 }
 .grid{
   display:grid;
@@ -39,19 +38,13 @@ header{
   border-radius:18px;
   padding:25px;
   text-align:center;
-  border:2px solid #FFD700;
-  cursor:pointer;
-  transition:0.3s;
-}
-.icon:hover{
-  background:#222;
 }
 .icon i{
   font-size:34px;
   color:#FFD700; /* ذهبي */
   margin-bottom:10px;
 }
-.icon p{font-size:16px}
+.icon p{font-size:16px;color:#fff}
 .main{
   width:100%;
   padding:15px;
@@ -59,9 +52,8 @@ header{
   border-radius:14px;
   font-size:18px;
   font-weight:bold;
-  background:#228B22; /* أخضر */
-  color:#fff;
-  cursor:pointer;
+  background:#FFD700; /* ذهبي */
+  color:#000;
 }
 input,select{
   width:100%;
@@ -73,10 +65,9 @@ input,select{
 .back{
   background:none;
   border:none;
-  color:#FF4500; /* أحمر */
+  color:#FFD700;
   margin-bottom:10px;
   font-size:16px;
-  cursor:pointer;
 }
 .lang button{
   background:none;
@@ -85,13 +76,11 @@ input,select{
   margin:0 3px;
   padding:5px 10px;
   border-radius:6px;
-  cursor:pointer;
 }
 h3{font-size:22px;text-align:center}
 p{line-height:1.6}
 </style>
 </head>
-
 <body>
 
 <header>
@@ -117,7 +106,7 @@ p{line-height:1.6}
 <!-- HOME -->
 <div class="container hidden" id="home">
 <div class="card">
-<p><span id="balLabel"></span>: <b id="balance">0 دج</b></p>
+<p><span id="balLabel"></span>: <b id="balance">0 DA</b></p>
 <p><span id="lvlLabel"></span>: <b id="pLevel"></b></p>
 <p><span id="refLabel"></span>: <b id="referrals">0</b></p>
 </div>
@@ -236,36 +225,44 @@ applyLang(localStorage.getItem("lang")||"ar");
 let users=JSON.parse(localStorage.getItem("users")||"{}");
 let current=null;
 
+// المستويات الجديدة
 const levels=[
-  {name:"المستوى التحفيزي", deposit:0, reward:50, duration:10},
-  {name:"المستوى الأول", deposit:2500, reward:70, duration:90},
-  {name:"المستوى الثاني", deposit:5200, reward:160, duration:120},
-  {name:"المستوى الثالث", deposit:15100, reward:400, duration:150},
-  {name:"المستوى الرابع", deposit:22200, reward:650, duration:180},
-  {name:"المستوى الخامس", deposit:30300, reward:900, duration:270},
-  {name:"المستوى السادس", deposit:40400, reward:1200, duration:360}
+{name:"المستوى التحفيزي",deposit:0,daily:50,days:10},
+{name:"المستوى الأولى",deposit:2500,daily:70,days:90},
+{name:"المستوى الثاني",deposit:5200,daily:160,days:120},
+{name:"المستوى الثالث",deposit:15100,daily:400,days:150},
+{name:"المستوى الرابع",deposit:22200,daily:650,days:180},
+{name:"المستوى الخامس",deposit:30300,daily:900,days:270},
+{name:"المستوى السادس",deposit:40400,daily:1200,days:360},
 ];
+
+const loginDiv=document.getElementById("login");
+const homeDiv=document.getElementById("home");
 
 function login(){
 let u=document.getElementById("u").value.trim();
 let p=document.getElementById("p").value;
+let ref=document.getElementById("ref").value.trim();
 if(!u||!p)return alert("Fill data");
-if(!users[u])users[u]={p,bal:0,lvl:0,refs:[],task:""};
+
+if(!users[u]){
+users[u]={p,bal:0,lvl:0,refs:[],task:""};
+if(ref && users[ref]){users[ref].bal+=50;users[ref].refs.push(u);}
+}
 if(users[u].p!==p)return alert("Wrong password");
 current=u;
 localStorage.setItem("users",JSON.stringify(users));
-document.getElementById("login").classList.add("hidden");
-document.getElementById("home").classList.remove("hidden");
+loginDiv.classList.add("hidden");
+homeDiv.classList.remove("hidden");
 update();
-renderLevels();
 }
 
 function update(){
-balance.innerText=users[current].bal+" دج";
-pLevel.innerText=levels[users[current].lvl]?.name || "المستوى التحفيزي";
+balance.innerText=users[current].bal+" DA";
+pLevel.innerText=levels[users[current].lvl].name;
 referrals.innerText=users[current].refs.length;
 pName.innerText=current;
-pLvl.innerText=levels[users[current].lvl]?.name || "المستوى التحفيزي";
+pLvl.innerText=levels[users[current].lvl].name;
 pRefs.innerText=users[current].refs.length;
 localStorage.setItem("users",JSON.stringify(users));
 }
@@ -273,6 +270,7 @@ localStorage.setItem("users",JSON.stringify(users));
 function openPage(id){
 document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));
 document.getElementById(id).classList.remove("hidden");
+if(id==="levels"){renderLevels();}
 }
 function home(){openPage("home");}
 
@@ -280,32 +278,24 @@ function doTask(){
 let t=new Date().toDateString();
 if(users[current].task===t)return alert("Already done");
 users[current].task=t;
-users[current].bal+=levels[users[current].lvl].reward;
+users[current].bal+=levels[users[current].lvl].daily;
 update();
 }
 
-function deposit(){
-window.open(`https://wa.me/${ADMIN_WHATS}`);
-}
-function withdraw(){
-window.open(`https://wa.me/${ADMIN_WHATS}`);
-}
-function openSupport(){
-window.open(`https://wa.me/${ADMIN_WHATS}`);
-}
+function deposit(){window.open(`https://wa.me/${ADMIN_WHATS}`);}
+function withdraw(){window.open(`https://wa.me/${ADMIN_WHATS}`);}
+function openSupport(){window.open(`https://wa.me/${ADMIN_WHATS}`);}
 
 function renderLevels(){
-const container=document.getElementById("levelList");
-container.innerHTML="";
+levelList.innerHTML="";
 levels.forEach(l=>{
-  container.innerHTML+=`
-    <div class="card">
-      <h3>${l.name}</h3>
-      <p>الإيداع: ${l.deposit} دج</p>
-      <p>مقابل كل مهمة: ${l.reward} دج لمدة ${l.duration} يوم</p>
-      <p>مهمة واحدة كل 24 ساعة</p>
-    </div>
-  `;
+levelList.innerHTML+=`
+<div class="card">
+<h3>${l.name}</h3>
+<p>الإيداع: ${l.deposit} DA</p>
+<p>الربح لكل مهمة: ${l.daily} DA لمدة ${l.days} يوم</p>
+<p>كل 24 ساعة مهمة واحدة</p>
+</div>`;
 });
 }
 </script>
