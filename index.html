@@ -263,6 +263,7 @@ const levels=[
 
 const loginDiv=document.getElementById("login");
 const homeDiv=document.getElementById("home");
+const levelList = document.getElementById("levelList");
 
 function login(){
 let u=document.getElementById("u").value.trim();
@@ -291,6 +292,7 @@ localStorage.setItem("users",JSON.stringify(users));
 function openPage(id){
 document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));
 document.getElementById(id).classList.remove("hidden");
+if(id==="levels") renderLevels();
 }
 function home(){openPage("home");}
 
