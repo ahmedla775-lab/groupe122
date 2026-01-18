@@ -28,9 +28,9 @@ p{line-height:1.6;}
 <header>
 <h3>Groupe des 22</h3>
 <div class="lang">
-<button onclick="setLang('ar')">AR</button>
-<button onclick="setLang('fr')">FR</button>
-<button onclick="setLang('en')">EN</button>
+<button id="langAr">AR</button>
+<button id="langFr">FR</button>
+<button id="langEn">EN</button>
 </div>
 </header>
 
@@ -67,7 +67,7 @@ p{line-height:1.6;}
 
 <!-- TASKS -->
 <div class="container hidden" id="tasks">
-<button class="back" onclick="home()">← <span id="backText"></span></button>
+<button class="back" id="backTasks">←</button>
 <div class="card">
 <h3 id="taskTitle"></h3>
 <p id="taskInfo"></p>
@@ -77,7 +77,7 @@ p{line-height:1.6;}
 
 <!-- DEPOSIT -->
 <div class="container hidden" id="deposit">
-<button class="back" onclick="home()">← <span id="backText2"></span></button>
+<button class="back" id="backDeposit">←</button>
 <div class="card">
 <h3 id="depositTitle"></h3>
 <select id="dMethod"><option>USDT</option><option>DZD</option></select>
@@ -88,7 +88,7 @@ p{line-height:1.6;}
 
 <!-- WITHDRAW -->
 <div class="container hidden" id="withdraw">
-<button class="back" onclick="home()">← <span id="backText3"></span></button>
+<button class="back" id="backWithdraw">←</button>
 <div class="card">
 <h3 id="withdrawTitle"></h3>
 <input id="wAmount" type="number" placeholder="Amount">
@@ -98,13 +98,13 @@ p{line-height:1.6;}
 
 <!-- LEVELS -->
 <div class="container hidden" id="levels">
-<button class="back" onclick="home()">← <span id="backText4"></span></button>
+<button class="back" id="backLevels">←</button>
 <div id="levelList"></div>
 </div>
 
 <!-- PROFILE -->
 <div class="container hidden" id="profile">
-<button class="back" onclick="home()">← <span id="backText5"></span></button>
+<button class="back" id="backProfile">←</button>
 <div class="card">
 <p id="profileUser"></p>
 <p id="profileLevel"></p>
@@ -114,7 +114,7 @@ p{line-height:1.6;}
 
 <!-- ABOUT -->
 <div class="container hidden" id="about">
-<button class="back" onclick="home()">← <span id="backTextAbout"></span></button>
+<button class="back" id="backAbout">←</button>
 <div class="card">
 <p id="aboutContent"></p>
 </div>
@@ -122,21 +122,19 @@ p{line-height:1.6;}
 
 <!-- CONTACT -->
 <div class="container hidden" id="contact">
-<button class="back" onclick="home()">← <span id="backTextContact"></span></button>
+<button class="back" id="backContact">←</button>
 <div class="card">
 <p id="contactInfo"></p>
 </div>
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded",function(){
 
-// ====== البيانات ======
+// ====== بيانات ======
 const ADMIN_WHATS="213660624409";
-
 let users=JSON.parse(localStorage.getItem("users")||"{}");
 let current=null;
-
 const levels=[
 {name:"المستوى التحفيزي",daily:50},
 {name:"المستوى الأول",daily:70},
@@ -183,7 +181,6 @@ profileUser:"User: ",profileLevel:"Level: ",profileRefs:"Referrals: "
 
 // ====== عناصر HTML ======
 const getEl=id=>document.getElementById(id);
-
 const loginTitle=getEl("loginTitle"), loginBtn=getEl("loginBtn");
 const balLabel=getEl("balLabel"), lvlLabel=getEl("lvlLabel"), refLabel=getEl("refLabel");
 const tasksText=getEl("tasksText"), depositText=getEl("depositText"), withdrawText=getEl("withdrawText");
@@ -191,9 +188,9 @@ const levelsText=getEl("levelsText"), profileText=getEl("profileText"), logoutTe
 const taskTitle=getEl("taskTitle"), doTaskBtn=getEl("doTaskBtn"), taskInfo=getEl("taskInfo");
 const depositTitle=getEl("depositTitle"), depositBtn=getEl("depositBtn");
 const withdrawTitle=getEl("withdrawTitle"), withdrawBtn=getEl("withdrawBtn");
-const backText=getEl("backText"), backText2=getEl("backText2"), backText3=getEl("backText3");
-const backText4=getEl("backText4"), backText5=getEl("backText5");
-const backTextAbout=getEl("backTextAbout"), backTextContact=getEl("backTextContact");
+const backText=getEl("backTasks"), backText2=getEl("backDeposit"), backText3=getEl("backWithdraw");
+const backText4=getEl("backLevels"), backText5=getEl("backProfile");
+const backTextAbout=getEl("backAbout"), backTextContact=getEl("backContact");
 const aboutContent=getEl("aboutContent"), contactInfo=getEl("contactInfo");
 const profileUser=getEl("profileUser"), profileLevel=getEl("profileLevel"), profileRefs=getEl("profileRefs");
 const levelList=getEl("levelList");
@@ -217,6 +214,7 @@ profileUser.innerText=t.profileUser; profileLevel.innerText=t.profileLevel; prof
 }
 applyLang(localStorage.getItem("lang")||"ar");
 
+// ====== تسجيل الدخول والتحديث ======
 function login(){
 let u=getEl("u").value.trim(), p=getEl("p").value;
 if(!u||!p) return alert("Fill data");
@@ -235,6 +233,8 @@ profileLevel.innerText="Level: "+levels[users[current].lvl].name;
 profileRefs.innerText="Referrals: "+users[current].refs.length;
 localStorage.setItem("users",JSON.stringify(users));
 }
+
+// ====== الصفحات ======
 function openPage(id){
 document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));
 getEl(id).classList.remove("hidden");
@@ -245,9 +245,11 @@ function doTask(){let t=new Date().toDateString(); if(users[current].task===t) r
 function deposit(){window.open(`https://wa.me/${ADMIN_WHATS}`);}
 function withdraw(){window.open(`https://wa.me/${ADMIN_WHATS}`);}
 function logout(){current=null; homeDiv.classList.add("hidden"); loginDiv.classList.remove("hidden");}
+
+// ====== المستويات ======
 function renderLevels(){levelList.innerHTML=""; levels.forEach(l=>{levelList.innerHTML+=`<div class="card"><h3>${l.name}</h3><p>ربح المهمة اليومية: ${l.daily} دج</p><p>كل 24 ساعة مهمة واحدة</p></div>`;});}
 
-// ====== أيقونات تستجيب ======
+// ====== ربط أيقونات ======
 getEl("tasksIcon").onclick=()=>openPage("tasks");
 getEl("depositIcon").onclick=()=>openPage("deposit");
 getEl("withdrawIcon").onclick=()=>openPage("withdraw");
@@ -258,8 +260,21 @@ getEl("contactIcon").onclick=()=>openPage("contact");
 getEl("logoutIcon").onclick=logout;
 loginBtn.onclick=login;
 
+// ====== ربط اللغة ======
+getEl("langAr").onclick=()=>setLang("ar");
+getEl("langFr").onclick=()=>setLang("fr");
+getEl("langEn").onclick=()=>setLang("en");
+
+// ====== ربط أزرار الرجوع ======
+backText.onclick=home;
+backText2.onclick=home;
+backText3.onclick=home;
+backText4.onclick=home;
+backText5.onclick=home;
+backTextAbout.onclick=home;
+backTextContact.onclick=home;
+
 });
 </script>
-
 </body>
 </html>
