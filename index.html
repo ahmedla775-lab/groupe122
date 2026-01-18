@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Groupe des 22</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+body{
+  margin:0;
+  font-family:system-ui;
+  background:#0f172a;
+  color:#fff;
+  font-size:18px
+}
+.hidden{display:none}
+header{
+  padding:16px;
+  background:#020617;
+  display:flex;
+  justify-content:space-between;
+  align-items:center
+}
+.container{padding:20px}
+.card{
+  background:#020617;
+  border-radius:18px;
+  padding:20px;
+  margin-bottom:18px
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px
+}
+.icon{
+  background:#020617;
+  border-radius:18px;
+  padding:25px;
+  text-align:center
+}
+.icon i{
+  font-size:34px;
+  color:#38bdf8;
+  margin-bottom:10px
+}
+.icon p{font-size:16px}
+.main{
+  width:100%;
+  padding:15px;
+  border:none;
+  border-radius:14px;
+  font-size:18px;
+  font-weight:bold;
+  background:#38bdf8;
+  color:#020617
+}
+input,select{
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:none;
+  margin:8px 0
+}
+.back{
+  background:none;
+  border:none;
+  color:#38bdf8;
+  margin-bottom:10px;
+  font-size:16px
+}
+.lang button{
+  background:none;
+  border:1px solid #38bdf8;
+  color:#38bdf8;
+  margin:0 3px;
+  padding:5px 10px;
+  border-radius:6px
+}
+h3{font-size:22px;text-align:center}
+p{line-height:1.6}
+</style>
+</head>
+
+<body>
+
+<header>
+<h3>Groupe des 22</h3>
+<div class="lang">
+<button onclick="setLang('ar')">AR</button>
+<button onclick="setLang('fr')">FR</button>
+<button onclick="setLang('en')">EN</button>
+</div>
+</header>
+
+<!-- LOGIN -->
+<div class="container" id="login">
+<div class="card">
+<h3 id="loginTitle"></h3>
+<input id="u" placeholder="Username">
+<input id="p" type="password" placeholder="Password">
+<input id="ref" placeholder="Referral code (optional)">
+<button class="main" id="loginBtn" onclick="login()"></button>
+</div>
+</div>
+
+<!-- HOME -->
+<div class="container hidden" id="home">
+<div class="card">
+<p><span id="balLabel"></span>: <b id="balance">0 DA</b></p>
+<p><span id="lvlLabel"></span>: <b id="pLevel"></b></p>
+<p><span id="refLabel"></span>: <b id="referrals">0</b></p>
+</div>
+
+<div class="grid">
+<div class="icon" onclick="openPage('tasks')"><i class="fa fa-list-check"></i><p id="tasksText"></p></div>
+<div class="icon" onclick="openPage('deposit')"><i class="fa fa-coins"></i><p id="depositText"></p></div>
+<div class="icon" onclick="openPage('withdraw')"><i class="fa fa-wallet"></i><p id="withdrawText"></p></div>
+<div class="icon" onclick="openPage('levels')"><i class="fa fa-layer-group"></i><p id="levelsText"></p></div>
+<div class="icon" onclick="openPage('profile')"><i class="fa fa-user"></i><p id="profileText"></p></div>
+<div class="icon" onclick="openSupport()"><i class="fa fa-headset"></i><p id="supportText"></p></div>
+</div>
+</div>
+
+<!-- TASKS -->
+<div class="container hidden" id="tasks">
+<button class="back" onclick="home()">← <span id="backText"></span></button>
+<div class="card">
+<h3 id="taskTitle"></h3>
+<p>مهمة واحدة كل 24 ساعة</p>
+<button class="main" id="doTaskBtn" onclick="doTask()"></button>
+</div>
+</div>
+
+<!-- DEPOSIT -->
+<div class="container hidden" id="deposit">
+<button class="back" onclick="home()">← <span id="backText2"></span></button>
+<div class="card">
+<h3 id="depositTitle"></h3>
+<select id="dMethod">
+<option>USDT</option>
+<option>DZD</option>
+</select>
+<input id="dAmount" type="number" placeholder="Amount">
+<button class="main" id="depositBtn" onclick="deposit()"></button>
+</div>
+</div>
+
+<!-- WITHDRAW -->
+<div class="container hidden" id="withdraw">
+<button class="back" onclick="home()">← <span id="backText3"></span></button>
+<div class="card">
+<h3 id="withdrawTitle"></h3>
+<input id="wAmount" type="number" placeholder="Amount">
+<button class="main" id="withdrawBtn" onclick="withdraw()"></button>
+</div>
+</div>
+
+<!-- LEVELS -->
+<div class="container hidden" id="levels">
+<button class="back" onclick="home()">← <span id="backText4"></span></button>
+<div id="levelList"></div>
+</div>
+
+<!-- PROFILE -->
+<div class="container hidden" id="profile">
+<button class="back" onclick="home()">← <span id="backText5"></span></button>
+<div class="card">
+<p>User: <b id="pName"></b></p>
+<p>Level: <b id="pLvl"></b></p>
+<p>Referrals: <b id="pRefs"></b></p>
+</div>
+</div>
+
+<script>
+const ADMIN_WHATS="213660624409";
+
+const translations={
+ar:{login:"تسجيل الدخول",loginBtn:"دخول / تسجيل",bal:"رصيدك",lvl:"مستواك",refs:"إحالاتك",
+tasks:"المهام",deposit:"شحن",withdraw:"سحب",levels:"المستويات",profile:"ملفي",support:"الدعم",
+back:"رجوع",taskTitle:"المهمة اليومية",doTask:"تنفيذ المهمة",
+depositTitle:"شحن الرصيد",depositBtn:"إرسال الطلب",
+withdrawTitle:"طلب سحب",withdrawBtn:"إرسال"},
+fr:{login:"Connexion",loginBtn:"Entrer / S'inscrire",bal:"Solde",lvl:"Niveau",refs:"Parrainages",
+tasks:"Tâches",deposit:"Dépôt",withdraw:"Retrait",levels:"Niveaux",profile:"Profil",support:"Support",
+back:"Retour",taskTitle:"Tâche quotidienne",doTask:"Exécuter",
+depositTitle:"Dépôt",depositBtn:"Envoyer",
+withdrawTitle:"Retrait",withdrawBtn:"Envoyer"},
+en:{login:"Login",loginBtn:"Login / Register",bal:"Balance",lvl:"Level",refs:"Referrals",
+tasks:"Tasks",deposit:"Deposit",withdraw:"Withdraw",levels:"Levels",profile:"Profile",support:"Support",
+back:"Back",taskTitle:"Daily Task",doTask:"Execute",
+depositTitle:"Deposit",depositBtn:"Send",
+withdrawTitle:"Withdraw",withdrawBtn:"Send"}
+};
+
+function setLang(l){localStorage.setItem("lang",l);applyLang(l);}
+function applyLang(l){
+document.documentElement.lang=l;
+document.documentElement.dir=l==="ar"?"rtl":"ltr";
+const t=translations[l];
+loginTitle.innerText=t.login;
+loginBtn.innerText=t.loginBtn;
+balLabel.innerText=t.bal;
+lvlLabel.innerText=t.lvl;
+refLabel.innerText=t.refs;
+tasksText.innerText=t.tasks;
+depositText.innerText=t.deposit;
+withdrawText.innerText=t.withdraw;
+levelsText.innerText=t.levels;
+profileText.innerText=t.profile;
+supportText.innerText=t.support;
+taskTitle.innerText=t.taskTitle;
+doTaskBtn.innerText=t.doTask;
+depositTitle.innerText=t.depositTitle;
+depositBtn.innerText=t.depositBtn;
+withdrawTitle.innerText=t.withdrawTitle;
+withdrawBtn.innerText=t.withdrawBtn;
+backText.innerText=t.back;
+backText2.innerText=t.back;
+backText3.innerText=t.back;
+backText4.innerText=t.back;
+backText5.innerText=t.back;
+}
+applyLang(localStorage.getItem("lang")||"ar");
+
+// ===== بيانات المستخدم =====
+let users = JSON.parse(localStorage.getItem("users")||"{}");
+let current = null;
+
+const levels=[
+{name:"Trial",daily:50},
+{name:"Level 1",daily:100},
+{name:"Level 2",daily:200},
+{name:"Level 3",daily:500}
+];
+
+const loginDiv = document.getElementById("login");
+const homeDiv = document.getElementById("home");
+
+// ===== دوال المنصة =====
+function login(){
+  let u = document.getElementById("u").value.trim();
+  let p = document.getElementById("p").value;
+  if(!u || !p) return alert("Fill data");
+
+  if(!users[u]) users[u] = {p, bal:0, lvl:0, refs:[], task:""};
+  if(users[u].p !== p) return alert("Wrong password");
+
+  current = u;
+  localStorage.setItem("users", JSON.stringify(users));
+  loginDiv.classList.add("hidden");
+  homeDiv.classList.remove("hidden");
+  update();
+  renderLevels();
+}
+
+function update(){
+  balance.innerText = users[current].bal+" DA";
+  pLevel.innerText = levels[users[current].lvl].name;
+  referrals.innerText = users[current].refs.length;
+  pName.innerText = current;
+  pLvl.innerText = levels[users[current].lvl].name;
+  pRefs.innerText = users[current].refs.length;
+  localStorage.setItem("users", JSON.stringify(users));
+}
+
+function openPage(id){
+  document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+}
+function home(){openPage("home");}
+
+function doTask(){
+  let t = new Date().toDateString();
+  if(users[current].task === t) return alert("Already done");
+  users[current].task = t;
+  users[current].bal += levels[users[current].lvl].daily;
+  update();
+}
+
+function deposit(){
+  window.open(`https://wa.me/${ADMIN_WHATS}`);
+}
+function withdraw(){
+  window.open(`https://wa.me/${ADMIN_WHATS}`);
+}
+function openSupport(){
+  window.open(`https://wa.me/${ADMIN_WHATS}`);
+}
+
+function renderLevels(){
+  levelList.innerHTML="";
+  levels.forEach(l=>{
+    levelList.innerHTML+=`<div class="card"><h3>${l.name}</h3><p>Daily profit: ${l.daily} DA</p></div>`;
+  });
+}
+</script>
+
+</body>
+</html>
