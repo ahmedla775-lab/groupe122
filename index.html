@@ -186,9 +186,36 @@ p{line-height:1.6;}
 
 <!-- LEVELS -->
 <div class="container hidden" id="levels">
-<button class="back" onclick="home()">← <span id="backText4"></span></button>
-<div id="levelList"></div>
+  <button class="back" onclick="home()">← <span id="backText4"></span></button>
+  <div id="levelList"></div>
 </div>
+
+<script>
+const levels=[
+  {name:"المستوى التحفيزي", deposit:0, reward:50, duration:10},
+  {name:"المستوى الأول", deposit:2500, reward:70, duration:90},
+  {name:"المستوى الثاني", deposit:5200, reward:160, duration:120},
+  {name:"المستوى الثالث", deposit:15100, reward:400, duration:150},
+  {name:"المستوى الرابع", deposit:22200, reward:650, duration:180},
+  {name:"المستوى الخامس", deposit:30300, reward:900, duration:270},
+  {name:"المستوى السادس", deposit:40400, reward:1200, duration:360}
+];
+
+function renderLevels(){
+  const container=document.getElementById("levelList");
+  container.innerHTML="";
+  levels.forEach(l=>{
+    container.innerHTML+=`
+      <div class="card">
+        <h3>${l.name}</h3>
+        <p>الإيداع: ${l.deposit} دج</p>
+        <p>مقابل كل مهمة: ${l.reward} دج لمدة ${l.duration} يوم</p>
+        <p>مهمة واحدة كل 24 ساعة</p>
+      </div>
+    `;
+  });
+}
+</script>
 
 <!-- PROFILE -->
 <div class="container hidden" id="profile">
