@@ -4,90 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Groupe des 22</title>
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 <style>
-body {
-  margin: 0;
-  font-family: system-ui;
-  background: #0f172a;
-  color: #fff;
-  font-size: 18px;
-}
-.hidden { display: none; }
-header {
-  padding: 16px;
-  background: #020617;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.container { padding: 20px; }
-.card {
-  background: #020617;
-  border-radius: 18px;
-  padding: 20px;
-  margin-bottom: 18px;
-}
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 18px;
-}
-.icon {
-  background: #020617;
-  border-radius: 18px;
-  padding: 25px;
-  text-align: center;
-  cursor: pointer;
-}
-.icon i {
-  font-size: 34px;
-  color: #FFD700; /* ذهبي */
-  margin-bottom: 10px;
-}
-.icon p { font-size: 16px; }
-.main {
-  width: 100%;
-  padding: 15px;
-  border: none;
-  border-radius: 14px;
-  font-size: 18px;
-  font-weight: bold;
-  background: #FFD700;
-  color: #020617;
-  cursor: pointer;
-}
-input, select {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  margin: 8px 0;
-}
-.back {
-  background: none;
-  border: none;
-  color: #FFD700;
-  margin-bottom: 10px;
-  font-size: 16px;
-  cursor: pointer;
-}
-.lang button {
-  background: none;
-  border: 1px solid #FFD700;
-  color: #FFD700;
-  margin: 0 3px;
-  padding: 5px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-h3 { font-size: 22px; text-align: center; }
-p { line-height: 1.6; }
+body {margin:0;font-family:system-ui;background:#0f172a;color:#fff;font-size:18px;}
+.hidden{display:none;}
+header{padding:16px;background:#020617;display:flex;justify-content:space-between;align-items:center;}
+.container{padding:20px;}
+.card{background:#020617;border-radius:18px;padding:20px;margin-bottom:18px;}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+.icon{background:#020617;border-radius:18px;padding:25px;text-align:center;cursor:pointer;}
+.icon i{font-size:34px;color:#FFD700;margin-bottom:10px;}
+.icon p{font-size:16px;}
+.main{width:100%;padding:15px;border:none;border-radius:14px;font-size:18px;font-weight:bold;background:#FFD700;color:#020617;cursor:pointer;}
+input,select{width:100%;padding:12px;border-radius:10px;border:none;margin:8px 0;}
+.back{background:none;border:none;color:#FFD700;margin-bottom:10px;font-size:16px;cursor:pointer;}
+.lang button{background:none;border:1px solid #FFD700;color:#FFD700;margin:0 3px;padding:5px 10px;border-radius:6px;cursor:pointer;}
+h3{font-size:22px;text-align:center;}
+p{line-height:1.6;}
 </style>
 </head>
-
 <body>
 
 <header>
@@ -106,7 +41,7 @@ p { line-height: 1.6; }
 <input id="u" placeholder="Username">
 <input id="p" type="password" placeholder="Password">
 <input id="ref" placeholder="Referral code (optional)">
-<button class="main" id="loginBtn" onclick="login()"></button>
+<button class="main" id="loginBtn"></button>
 </div>
 </div>
 
@@ -136,7 +71,7 @@ p { line-height: 1.6; }
 <div class="card">
 <h3 id="taskTitle"></h3>
 <p id="taskInfo"></p>
-<button class="main" id="doTaskBtn" onclick="doTask()"></button>
+<button class="main" id="doTaskBtn"></button>
 </div>
 </div>
 
@@ -145,12 +80,9 @@ p { line-height: 1.6; }
 <button class="back" onclick="home()">← <span id="backText2"></span></button>
 <div class="card">
 <h3 id="depositTitle"></h3>
-<select id="dMethod">
-<option>USDT</option>
-<option>DZD</option>
-</select>
+<select id="dMethod"><option>USDT</option><option>DZD</option></select>
 <input id="dAmount" type="number" placeholder="Amount">
-<button class="main" id="depositBtn" onclick="deposit()"></button>
+<button class="main" id="depositBtn"></button>
 </div>
 </div>
 
@@ -160,7 +92,7 @@ p { line-height: 1.6; }
 <div class="card">
 <h3 id="withdrawTitle"></h3>
 <input id="wAmount" type="number" placeholder="Amount">
-<button class="main" id="withdrawBtn" onclick="withdraw()"></button>
+<button class="main" id="withdrawBtn"></button>
 </div>
 </div>
 
@@ -197,43 +129,75 @@ p { line-height: 1.6; }
 </div>
 
 <script>
+document.addEventListener("DOMContentLoaded", function(){
 const ADMIN_WHATS="213660624409";
 
 const translations={
-ar:{
-login:"تسجيل الدخول",loginBtn:"دخول / تسجيل",bal:"رصيدك",lvl:"مستواك",refs:"إحالاتك",
-tasks:"المهام",deposit:"شحن",withdraw:"سحب",levels:"المستويات",profile:"ملفي",support:"الدعم",
+ar:{login:"تسجيل الدخول",loginBtn:"دخول / تسجيل",bal:"رصيدك",lvl:"مستواك",refs:"إحالاتك",
+tasks:"المهام",deposit:"شحن",withdraw:"سحب",levels:"المستويات",profile:"ملفي",
 back:"رجوع",taskTitle:"المهمة اليومية",doTask:"تنفيذ المهمة",taskInfo:"مهمة واحدة كل 24 ساعة",
 depositTitle:"شحن الرصيد",depositBtn:"إرسال الطلب",
 withdrawTitle:"طلب سحب",withdrawBtn:"إرسال",
-aboutContent:"منصة Groupe 122 منصة جزائرية مائة بالمائة حقيقية تسعى لتصبح أفضل منصة عالمية للترويج و الإشهار و خلق فرص عمل حقيقية في ظل ما نشهده من تطور اقتصادي رقمي في التجارة والتسويق",
+aboutContent:"منصة Groupe 122 منصة جزائرية مائة بالمائة حقيقية تسعى لتصبح أفضل منصة عالمية للترويج و الإشهار و خلق فرص عمل حقيقية.",
 contactInfo:"راسلنا على البريد الإلكتروني التالي: hamadamamado36@gmail.com",
 logoutText:"خروج",
 profileUser:"User: ",profileLevel:"Level: ",profileRefs:"Referrals: "
 },
-fr:{
-login:"Connexion",loginBtn:"Entrer / S'inscrire",bal:"Solde",lvl:"Niveau",refs:"Parrainages",
-tasks:"Tâches",deposit:"Dépôt",withdraw:"Retrait",levels:"Niveaux",profile:"Profil",support:"Support",
+fr:{login:"Connexion",loginBtn:"Entrer / S'inscrire",bal:"Solde",lvl:"Niveau",refs:"Parrainages",
+tasks:"Tâches",deposit:"Dépôt",withdraw:"Retrait",levels:"Niveaux",profile:"Profil",
 back:"Retour",taskTitle:"Tâche quotidienne",doTask:"Exécuter",taskInfo:"Une tâche toutes les 24 heures",
 depositTitle:"Dépôt",depositBtn:"Envoyer",
 withdrawTitle:"Retrait",withdrawBtn:"Envoyer",
-aboutContent:"La plateforme Groupe 122 est 100% algérienne et vise à devenir la meilleure plateforme mondiale pour la promotion, la publicité et la création d'emplois réels dans le contexte du développement économique numérique.",
+aboutContent:"La plateforme Groupe 122 est 100% algérienne et vise à devenir la meilleure plateforme mondiale.",
 contactInfo:"Contactez-nous à l'adresse e-mail suivante: hamadamamado36@gmail.com",
 logoutText:"Déconnexion",
 profileUser:"Utilisateur: ",profileLevel:"Niveau: ",profileRefs:"Parrainages: "
 },
-en:{
-login:"Login",loginBtn:"Login / Register",bal:"Balance",lvl:"Level",refs:"Referrals",
-tasks:"Tasks",deposit:"Deposit",withdraw:"Withdraw",levels:"Levels",profile:"Profile",support:"Support",
+en:{login:"Login",loginBtn:"Login / Register",bal:"Balance",lvl:"Level",refs:"Referrals",
+tasks:"Tasks",deposit:"Deposit",withdraw:"Withdraw",levels:"Levels",profile:"Profile",
 back:"Back",taskTitle:"Daily Task",doTask:"Execute",taskInfo:"One task every 24 hours",
 depositTitle:"Deposit",depositBtn:"Send",
 withdrawTitle:"Withdraw",withdrawBtn:"Send",
-aboutContent:"Groupe 122 is a 100% Algerian platform aiming to become the best global platform for promotion, advertising and creating real job opportunities in the context of digital economic development.",
-contactInfo:"Contact us at the following email: hamadamamado36@gmail.com",
+aboutContent:"Groupe 122 is a 100% Algerian platform aiming to become the best global platform.",
+contactInfo:"Contact us at: hamadamamado36@gmail.com",
 logoutText:"Logout",
 profileUser:"User: ",profileLevel:"Level: ",profileRefs:"Referrals: "
 }
 };
+
+const loginTitle=document.getElementById("loginTitle");
+const loginBtn=document.getElementById("loginBtn");
+const balLabel=document.getElementById("balLabel");
+const lvlLabel=document.getElementById("lvlLabel");
+const refLabel=document.getElementById("refLabel");
+const tasksText=document.getElementById("tasksText");
+const depositText=document.getElementById("depositText");
+const withdrawText=document.getElementById("withdrawText");
+const levelsText=document.getElementById("levelsText");
+const profileText=document.getElementById("profileText");
+const logoutText=document.getElementById("logoutText");
+const taskTitle=document.getElementById("taskTitle");
+const doTaskBtn=document.getElementById("doTaskBtn");
+const taskInfo=document.getElementById("taskInfo");
+const depositTitle=document.getElementById("depositTitle");
+const depositBtn=document.getElementById("depositBtn");
+const withdrawTitle=document.getElementById("withdrawTitle");
+const withdrawBtn=document.getElementById("withdrawBtn");
+const backText=document.getElementById("backText");
+const backText2=document.getElementById("backText2");
+const backText3=document.getElementById("backText3");
+const backText4=document.getElementById("backText4");
+const backText5=document.getElementById("backText5");
+const backTextAbout=document.getElementById("backTextAbout");
+const backTextContact=document.getElementById("backTextContact");
+const aboutContent=document.getElementById("aboutContent");
+const contactInfo=document.getElementById("contactInfo");
+const profileUser=document.getElementById("profileUser");
+const profileLevel=document.getElementById("profileLevel");
+const profileRefs=document.getElementById("profileRefs");
+const levelList=document.getElementById("levelList");
+const loginDiv=document.getElementById("login");
+const homeDiv=document.getElementById("home");
 
 function setLang(l){localStorage.setItem("lang",l);applyLang(l);}
 function applyLang(l){
@@ -250,7 +214,7 @@ depositText.innerText=t.deposit;
 withdrawText.innerText=t.withdraw;
 levelsText.innerText=t.levels;
 profileText.innerText=t.profile;
-supportText?.innerText=t.support;
+logoutText.innerText=t.logoutText;
 taskTitle.innerText=t.taskTitle;
 doTaskBtn.innerText=t.doTask;
 taskInfo.innerText=t.taskInfo;
@@ -267,11 +231,11 @@ backTextAbout.innerText=t.back;
 backTextContact.innerText=t.back;
 aboutContent.innerText=t.aboutContent;
 contactInfo.innerText=t.contactInfo;
-logoutText.innerText=t.logoutText;
 profileUser.innerText=t.profileUser;
 profileLevel.innerText=t.profileLevel;
 profileRefs.innerText=t.profileRefs;
 }
+
 applyLang(localStorage.getItem("lang")||"ar");
 
 let users=JSON.parse(localStorage.getItem("users")||"{}");
@@ -286,10 +250,6 @@ const levels=[
 {name:"المستوى الخامس",daily:900},
 {name:"المستوى السادس",daily:1200}
 ];
-
-const loginDiv=document.getElementById("login");
-const homeDiv=document.getElementById("home");
-const levelList=document.getElementById("levelList");
 
 function login(){
 let u=document.getElementById("u").value.trim();
@@ -309,9 +269,9 @@ function update(){
 balance.innerText=users[current].bal+" DA";
 pLevel.innerText=levels[users[current].lvl].name;
 referrals.innerText=users[current].refs.length;
-pName.innerText=current;
-pLvl.innerText=levels[users[current].lvl].name;
-pRefs.innerText=users[current].refs.length;
+profileUser.innerText="User: "+current;
+profileLevel.innerText="Level: "+levels[users[current].lvl].name;
+profileRefs.innerText="Referrals: "+users[current].refs.length;
 localStorage.setItem("users",JSON.stringify(users));
 }
 
@@ -346,7 +306,8 @@ levels.forEach(l=>{
 levelList.innerHTML+=`<div class="card"><h3>${l.name}</h3><p>ربح المهمة اليومية: ${l.daily} دج</p><p>كل 24 ساعة مهمة واحدة</p></div>`;
 });
 }
-</script>
 
+});
+</script>
 </body>
 </html>
