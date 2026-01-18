@@ -4,47 +4,49 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Groupe des 22</title>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
 body{
   margin:0;
   font-family:system-ui;
-  background:#000;
+  background:#0f172a;
   color:#fff;
-  font-size:18px;
+  font-size:18px
 }
 .hidden{display:none}
 header{
   padding:16px;
-  background:#111;
+  background:#020617;
   display:flex;
   justify-content:space-between;
-  align-items:center;
+  align-items:center
 }
 .container{padding:20px}
 .card{
-  background:#111;
+  background:#020617;
   border-radius:18px;
   padding:20px;
-  margin-bottom:18px;
+  margin-bottom:18px
 }
 .grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
-  gap:18px;
+  gap:18px
 }
 .icon{
-  background:#111;
+  background:#020617;
   border-radius:18px;
   padding:25px;
-  text-align:center;
+  text-align:center
 }
 .icon i{
   font-size:34px;
   color:#FFD700; /* ذهبي */
-  margin-bottom:10px;
+  margin-bottom:10px
 }
-.icon p{font-size:16px;color:#fff}
+.icon p{font-size:16px}
 .main{
   width:100%;
   padding:15px;
@@ -52,22 +54,22 @@ header{
   border-radius:14px;
   font-size:18px;
   font-weight:bold;
-  background:#FFD700; /* ذهبي */
-  color:#000;
+  background:#FFD700;
+  color:#020617
 }
 input,select{
   width:100%;
   padding:12px;
   border-radius:10px;
   border:none;
-  margin:8px 0;
+  margin:8px 0
 }
 .back{
   background:none;
   border:none;
   color:#FFD700;
   margin-bottom:10px;
-  font-size:16px;
+  font-size:16px
 }
 .lang button{
   background:none;
@@ -75,12 +77,13 @@ input,select{
   color:#FFD700;
   margin:0 3px;
   padding:5px 10px;
-  border-radius:6px;
+  border-radius:6px
 }
 h3{font-size:22px;text-align:center}
 p{line-height:1.6}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -117,7 +120,9 @@ p{line-height:1.6}
 <div class="icon" onclick="openPage('withdraw')"><i class="fa fa-wallet"></i><p id="withdrawText"></p></div>
 <div class="icon" onclick="openPage('levels')"><i class="fa fa-layer-group"></i><p id="levelsText"></p></div>
 <div class="icon" onclick="openPage('profile')"><i class="fa fa-user"></i><p id="profileText"></p></div>
-<div class="icon" onclick="openSupport()"><i class="fa fa-headset"></i><p id="supportText"></p></div>
+<div class="icon" onclick="openPage('about')"><i class="fa fa-circle-info"></i><p id="aboutText">من نحن</p></div>
+<div class="icon" onclick="openPage('contact')"><i class="fa fa-envelope"></i><p id="contactText">راسلنا</p></div>
+<div class="icon" onclick="logout()"><i class="fa fa-sign-out-alt"></i><p>خروج</p></div>
 </div>
 </div>
 
@@ -168,6 +173,23 @@ p{line-height:1.6}
 <p>User: <b id="pName"></b></p>
 <p>Level: <b id="pLvl"></b></p>
 <p>Referrals: <b id="pRefs"></b></p>
+</div>
+</div>
+
+<!-- ABOUT / من نحن -->
+<div class="container hidden" id="about">
+<button class="back" onclick="home()">← <span id="backTextAbout">رجوع</span></button>
+<div class="card">
+<p>منصة Groupe 122 منصة جزائرية مائة بالمائة حقيقية تسعى لتصبح أفضل منصة عالمية للترويج و الإشهار و خلق فرص عمل حقيقية في ظل ما نشهده من تطور اقتصادي رقمي في التجارة والتسويق</p>
+</div>
+</div>
+
+<!-- CONTACT / راسلنا -->
+<div class="container hidden" id="contact">
+<button class="back" onclick="home()">← <span id="backTextContact">رجوع</span></button>
+<div class="card">
+<p>راسلنا على البريد الإلكتروني التالي:</p>
+<p><b>hamadamamado36@gmail.com</b></p>
 </div>
 </div>
 
@@ -225,36 +247,28 @@ applyLang(localStorage.getItem("lang")||"ar");
 let users=JSON.parse(localStorage.getItem("users")||"{}");
 let current=null;
 
-// المستويات الجديدة
 const levels=[
-{name:"المستوى التحفيزي",deposit:0,daily:50,days:10},
-{name:"المستوى الأولى",deposit:2500,daily:70,days:90},
-{name:"المستوى الثاني",deposit:5200,daily:160,days:120},
-{name:"المستوى الثالث",deposit:15100,daily:400,days:150},
-{name:"المستوى الرابع",deposit:22200,daily:650,days:180},
-{name:"المستوى الخامس",deposit:30300,daily:900,days:270},
-{name:"المستوى السادس",deposit:40400,daily:1200,days:360},
+{name:"المستوى التحفيزي",daily:50},
+{name:"المستوى الأول",daily:70},
+{name:"المستوى الثاني",daily:160},
+{name:"المستوى الثالث",daily:400},
+{name:"المستوى الرابع",daily:650},
+{name:"المستوى الخامس",daily:900},
+{name:"المستوى السادس",daily:1200}
 ];
-
-const loginDiv=document.getElementById("login");
-const homeDiv=document.getElementById("home");
 
 function login(){
 let u=document.getElementById("u").value.trim();
 let p=document.getElementById("p").value;
-let ref=document.getElementById("ref").value.trim();
 if(!u||!p)return alert("Fill data");
-
-if(!users[u]){
-users[u]={p,bal:0,lvl:0,refs:[],task:""};
-if(ref && users[ref]){users[ref].bal+=50;users[ref].refs.push(u);}
-}
+if(!users[u])users[u]={p,bal:0,lvl:0,refs:[],task:""};
 if(users[u].p!==p)return alert("Wrong password");
 current=u;
 localStorage.setItem("users",JSON.stringify(users));
 loginDiv.classList.add("hidden");
 homeDiv.classList.remove("hidden");
 update();
+renderLevels();
 }
 
 function update(){
@@ -270,7 +284,6 @@ localStorage.setItem("users",JSON.stringify(users));
 function openPage(id){
 document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));
 document.getElementById(id).classList.remove("hidden");
-if(id==="levels"){renderLevels();}
 }
 function home(){openPage("home");}
 
@@ -289,15 +302,12 @@ function openSupport(){window.open(`https://wa.me/${ADMIN_WHATS}`);}
 function renderLevels(){
 levelList.innerHTML="";
 levels.forEach(l=>{
-levelList.innerHTML+=`
-<div class="card">
-<h3>${l.name}</h3>
-<p>الإيداع: ${l.deposit} DA</p>
-<p>الربح لكل مهمة: ${l.daily} DA لمدة ${l.days} يوم</p>
-<p>كل 24 ساعة مهمة واحدة</p>
-</div>`;
+levelList.innerHTML+=`<div class="card"><h3>${l.name}</h3><p>ربح المهمة اليومية: ${l.daily} دج</p><p>كل 24 ساعة مهمة واحدة</p></div>`;
 });
 }
+
+const loginDiv=document.getElementById("login");
+const homeDiv=document.getElementById("home");
 </script>
 
 </body>
