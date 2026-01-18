@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Groupe des 22</title>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
@@ -41,7 +42,11 @@ header {
   text-align: center;
   cursor: pointer;
 }
-.icon i { font-size: 34px; color: #FFD700; margin-bottom: 10px; }
+.icon i {
+  font-size: 34px;
+  color: #FFD700; /* ذهبي */
+  margin-bottom: 10px;
+}
 .icon p { font-size: 16px; }
 .main {
   width: 100%;
@@ -177,27 +182,129 @@ p { line-height: 1.6; }
 
 <!-- ABOUT -->
 <div class="container hidden" id="about">
-<button class="back" onclick="home()">← <span id="backTextAbout">رجوع</span></button>
+<button class="back" onclick="home()">← <span id="backTextAbout"></span></button>
 <div class="card">
-<p id="aboutTextContent"></p>
+<p id="aboutContent"></p>
 </div>
 </div>
 
 <!-- CONTACT -->
 <div class="container hidden" id="contact">
-<button class="back" onclick="home()">← <span id="backTextContact">رجوع</span></button>
+<button class="back" onclick="home()">← <span id="backTextContact"></span></button>
 <div class="card">
-<p id="contactTextContent"></p>
-<p><b>hamadamamado36@gmail.com</b></p>
+<p id="contactContent"></p>
 </div>
 </div>
 
 <script>
 const ADMIN_WHATS="213660624409";
 
+// تعريف كل العناصر قبل applyLang
+const loginTitle = document.getElementById("loginTitle");
+const loginBtn = document.getElementById("loginBtn");
+const balLabel = document.getElementById("balLabel");
+const lvlLabel = document.getElementById("lvlLabel");
+const refLabel = document.getElementById("refLabel");
+const tasksText = document.getElementById("tasksText");
+const depositText = document.getElementById("depositText");
+const withdrawText = document.getElementById("withdrawText");
+const levelsText = document.getElementById("levelsText");
+const profileText = document.getElementById("profileText");
+const aboutText = document.getElementById("aboutText");
+const contactText = document.getElementById("contactText");
+const logoutText = document.getElementById("logoutText");
+
+const backText = document.getElementById("backText");
+const backText2 = document.getElementById("backText2");
+const backText3 = document.getElementById("backText3");
+const backText4 = document.getElementById("backText4");
+const backText5 = document.getElementById("backText5");
+const backTextAbout = document.getElementById("backTextAbout");
+const backTextContact = document.getElementById("backTextContact");
+
+const taskTitle = document.getElementById("taskTitle");
+const taskDesc = document.getElementById("taskDesc");
+const doTaskBtn = document.getElementById("doTaskBtn");
+
+const depositTitle = document.getElementById("depositTitle");
+const depositBtn = document.getElementById("depositBtn");
+const withdrawTitle = document.getElementById("withdrawTitle");
+const withdrawBtn = document.getElementById("withdrawBtn");
+
+const levelList = document.getElementById("levelList");
+const aboutContent = document.getElementById("aboutContent");
+const contactContent = document.getElementById("contactContent");
+
+const translations={
+ar:{login:"تسجيل الدخول",loginBtn:"دخول / تسجيل",bal:"رصيدك",lvl:"مستواك",refs:"إحالاتك",
+tasks:"المهام",deposit:"شحن",withdraw:"سحب",levels:"المستويات",profile:"ملفي",support:"الدعم",
+back:"رجوع",taskTitle:"المهمة اليومية",taskDesc:"مهمة واحدة كل 24 ساعة",doTask:"تنفيذ المهمة",
+depositTitle:"شحن الرصيد",depositBtn:"إرسال الطلب",
+withdrawTitle:"طلب سحب",withdrawBtn:"إرسال",
+aboutContent:"منصة Groupe 122 منصة جزائرية مائة بالمائة حقيقية تسعى لتصبح أفضل منصة عالمية للترويج و الإشهار و خلق فرص عمل حقيقية في ظل ما نشهده من تطور اقتصادي رقمي في التجارة والتسويق",
+contactContent:"راسلنا على البريد الإلكتروني التالي: hamadamamado36@gmail.com",
+logoutText:"خروج"
+},
+fr:{login:"Connexion",loginBtn:"Entrer / S'inscrire",bal:"Solde",lvl:"Niveau",refs:"Parrainages",
+tasks:"Tâches",deposit:"Dépôt",withdraw:"Retrait",levels:"Niveaux",profile:"Profil",support:"Support",
+back:"Retour",taskTitle:"Tâche quotidienne",taskDesc:"Une tâche par jour",doTask:"Exécuter",
+depositTitle:"Dépôt",depositBtn:"Envoyer",
+withdrawTitle:"Retrait",withdrawBtn:"Envoyer",
+aboutContent:"Groupe 122 est une plateforme algérienne 100% réelle visant à devenir la meilleure plateforme mondiale pour la promotion, la publicité et la création de véritables opportunités d'emploi dans le cadre de l'évolution économique numérique.",
+contactContent:"Contactez-nous par e-mail : hamadamamado36@gmail.com",
+logoutText:"Déconnexion"
+},
+en:{login:"Login",loginBtn:"Login / Register",bal:"Balance",lvl:"Level",refs:"Referrals",
+tasks:"Tasks",deposit:"Deposit",withdraw:"Withdraw",levels:"Levels",profile:"Profile",support:"Support",
+back:"Back",taskTitle:"Daily Task",taskDesc:"One task every 24 hours",doTask:"Execute",
+depositTitle:"Deposit",depositBtn:"Send",
+withdrawTitle:"Withdraw",withdrawBtn:"Send",
+aboutContent:"Groupe 122 is an Algerian platform 100% real aiming to become the best global platform for promotion, advertising, and creating real job opportunities in the context of digital economic growth.",
+contactContent:"Contact us by email: hamadamamado36@gmail.com",
+logoutText:"Logout"
+}
+};
+
+function setLang(l){localStorage.setItem("lang",l);applyLang(l);}
+function applyLang(l){
+document.documentElement.lang=l;
+document.documentElement.dir=l==="ar"?"rtl":"ltr";
+const t=translations[l];
+loginTitle.innerText=t.login;
+loginBtn.innerText=t.loginBtn;
+balLabel.innerText=t.bal;
+lvlLabel.innerText=t.lvl;
+refLabel.innerText=t.refs;
+tasksText.innerText=t.tasks;
+depositText.innerText=t.deposit;
+withdrawText.innerText=t.withdraw;
+levelsText.innerText=t.levels;
+profileText.innerText=t.profile;
+aboutText.innerText=t.aboutContent;
+aboutContent.innerText=t.aboutContent;
+contactText.innerText=t.contactContent;
+contactContent.innerText=t.contactContent;
+logoutText.innerText=t.logoutText;
+taskTitle.innerText=t.taskTitle;
+taskDesc.innerText=t.taskDesc;
+doTaskBtn.innerText=t.doTask;
+depositTitle.innerText=t.depositTitle;
+depositBtn.innerText=t.depositBtn;
+withdrawTitle.innerText=t.withdrawTitle;
+withdrawBtn.innerText=t.withdrawBtn;
+backText.innerText=t.back;
+backText2.innerText=t.back;
+backText3.innerText=t.back;
+backText4.innerText=t.back;
+backText5.innerText=t.back;
+backTextAbout.innerText=t.back;
+backTextContact.innerText=t.back;
+}
+
+applyLang(localStorage.getItem("lang")||"ar");
+
 let users=JSON.parse(localStorage.getItem("users")||"{}");
 let current=null;
-let currentLang = localStorage.getItem("lang") || "ar";
 
 const levels=[
 {name:"المستوى التحفيزي",daily:50},
@@ -209,89 +316,8 @@ const levels=[
 {name:"المستوى السادس",daily:1200}
 ];
 
-const translations={
-ar:{
-login:"تسجيل الدخول", loginBtn:"دخول / تسجيل", bal:"رصيدك", lvl:"مستواك", refs:"إحالاتك",
-tasks:"المهام", deposit:"شحن", withdraw:"سحب", levels:"المستويات", profile:"ملفي", support:"الدعم",
-about:"من نحن", aboutText:"منصة Groupe 122 منصة جزائرية مائة بالمائة حقيقية تسعى لتصبح أفضل منصة عالمية للترويج و الإشهار و خلق فرص عمل حقيقية في ظل ما نشهده من تطور اقتصادي رقمي في التجارة والتسويق",
-contact:"راسلنا", contactText:"راسلنا على البريد الإلكتروني التالي:", logout:"خروج",
-back:"رجوع", taskTitle:"المهمة اليومية", taskDesc:"مهمة واحدة كل 24 ساعة", doTask:"تنفيذ المهمة",
-depositTitle:"شحن الرصيد", depositBtn:"إرسال الطلب", withdrawTitle:"طلب سحب", withdrawBtn:"إرسال",
-levelDaily:"ربح المهمة اليومية", levelTask:"كل 24 ساعة مهمة واحدة"
-},
-fr:{
-login:"Connexion", loginBtn:"Entrer / S'inscrire", bal:"Solde", lvl:"Niveau", refs:"Parrainages",
-tasks:"Tâches", deposit:"Dépôt", withdraw:"Retrait", levels:"Niveaux", profile:"Profil", support:"Support",
-about:"À propos", aboutText:"La plateforme Groupe 122 est 100% algérienne et réelle, visant à devenir la meilleure plateforme mondiale pour la promotion, la publicité et la création d'emplois réels dans le cadre du développement économique numérique.",
-contact:"Contactez-nous", contactText:"Contactez-nous à l'adresse e-mail suivante :", logout:"Déconnexion",
-back:"Retour", taskTitle:"Tâche quotidienne", taskDesc:"Une tâche toutes les 24 heures", doTask:"Exécuter",
-depositTitle:"Dépôt", depositBtn:"Envoyer", withdrawTitle:"Retrait", withdrawBtn:"Envoyer",
-levelDaily:"Gain quotidien de la tâche", levelTask:"Une tâche toutes les 24 heures"
-},
-en:{
-login:"Login", loginBtn:"Login / Register", bal:"Balance", lvl:"Level", refs:"Referrals",
-tasks:"Tasks", deposit:"Deposit", withdraw:"Withdraw", levels:"Levels", profile:"Profile", support:"Support",
-about:"About", aboutText:"Groupe 122 platform is 100% Algerian and real, aiming to become the best global platform for promotion, advertising and creating real job opportunities in the context of digital economic development.",
-contact:"Contact Us", contactText:"Contact us at the following email:", logout:"Logout",
-back:"Back", taskTitle:"Daily Task", taskDesc:"One task every 24 hours", doTask:"Execute",
-depositTitle:"Deposit", depositBtn:"Send", withdrawTitle:"Withdraw", withdrawBtn:"Send",
-levelDaily:"Daily task reward", levelTask:"One task every 24 hours"
-}
-};
-
-function setLang(l){
-currentLang=l;
-localStorage.setItem("lang",l);
-applyLang();
-}
-
-function applyLang(){
-const t=translations[currentLang];
-
-loginTitle.innerText=t.login;
-loginBtn.innerText=t.loginBtn;
-balLabel.innerText=t.bal;
-lvlLabel.innerText=t.lvl;
-refLabel.innerText=t.refs;
-
-tasksText.innerText=t.tasks;
-depositText.innerText=t.deposit;
-withdrawText.innerText=t.withdraw;
-levelsText.innerText=t.levels;
-profileText.innerText=t.profile;
-aboutText.innerText=t.about;
-contactText.innerText=t.contact;
-logoutText.innerText=t.logout;
-
-backText.innerText=t.back;
-backText2.innerText=t.back;
-backText3.innerText=t.back;
-backText4.innerText=t.back;
-backText5.innerText=t.back;
-backTextAbout.innerText=t.back;
-backTextContact.innerText=t.back;
-
-taskTitle.innerText=t.taskTitle;
-taskDesc.innerText=t.taskDesc;
-doTaskBtn.innerText=t.doTask;
-
-depositTitle.innerText=t.depositTitle;
-depositBtn.innerText=t.depositBtn;
-
-withdrawTitle.innerText=t.withdrawTitle;
-withdrawBtn.innerText=t.withdrawBtn;
-
-document.getElementById("aboutTextContent").innerText=t.aboutText;
-document.getElementById("contactTextContent").innerText=t.contactText;
-
-renderLevels();
-}
-
-applyLang();
-
 const loginDiv=document.getElementById("login");
 const homeDiv=document.getElementById("home");
-const levelList = document.getElementById("levelList");
 
 function login(){
 let u=document.getElementById("u").value.trim();
@@ -322,7 +348,6 @@ document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));
 document.getElementById(id).classList.remove("hidden");
 if(id==="levels") renderLevels();
 }
-
 function home(){openPage("home");}
 
 function doTask(){
@@ -345,9 +370,8 @@ loginDiv.classList.remove("hidden");
 
 function renderLevels(){
 levelList.innerHTML="";
-const t = translations[currentLang];
 levels.forEach(l=>{
-levelList.innerHTML+=`<div class="card"><h3>${l.name}</h3><p>${t.levelDaily}: ${l.daily} دج</p><p>${t.levelTask}</p></div>`;
+levelList.innerHTML+=`<div class="card"><h3>${l.name}</h3><p>ربح المهمة اليومية: ${l.daily} دج</p><p>كل 24 ساعة مهمة واحدة</p></div>`;
 });
 }
 </script>
