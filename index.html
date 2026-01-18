@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Groupe des 22</title>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
 body {
   margin: 0;
@@ -42,7 +44,7 @@ header {
 }
 .icon i {
   font-size: 34px;
-  color: #FFD700; /* ذهبي */
+  color: #FFD700;
   margin-bottom: 10px;
 }
 .icon p { font-size: 16px; }
@@ -117,20 +119,20 @@ p { line-height: 1.6; }
 </div>
 
 <div class="grid">
-<div class="icon" onclick="openPage('tasks')"><i class="fa fa-list-check"></i><p id="tasksText"></p></div>
-<div class="icon" onclick="openPage('deposit')"><i class="fa fa-coins"></i><p id="depositText"></p></div>
-<div class="icon" onclick="openPage('withdraw')"><i class="fa fa-wallet"></i><p id="withdrawText"></p></div>
-<div class="icon" onclick="openPage('levels')"><i class="fa fa-layer-group"></i><p id="levelsText"></p></div>
-<div class="icon" onclick="openPage('profile')"><i class="fa fa-user"></i><p id="profileText"></p></div>
-<div class="icon" onclick="openPage('about')"><i class="fa fa-circle-info"></i><p id="aboutText">من نحن</p></div>
-<div class="icon" onclick="openPage('contact')"><i class="fa fa-envelope"></i><p id="contactText">راسلنا</p></div>
-<div class="icon" onclick="logout()"><i class="fa fa-sign-out-alt"></i><p>خروج</p></div>
+<div class="icon" data-target="tasks"><i class="fa fa-list-check"></i><p id="tasksText"></p></div>
+<div class="icon" data-target="deposit"><i class="fa fa-coins"></i><p id="depositText"></p></div>
+<div class="icon" data-target="withdraw"><i class="fa fa-wallet"></i><p id="withdrawText"></p></div>
+<div class="icon" data-target="levels"><i class="fa fa-layer-group"></i><p id="levelsText"></p></div>
+<div class="icon" data-target="profile"><i class="fa fa-user"></i><p id="profileText"></p></div>
+<div class="icon" data-target="about"><i class="fa fa-circle-info"></i><p id="aboutText">من نحن</p></div>
+<div class="icon" data-target="contact"><i class="fa fa-envelope"></i><p id="contactText">راسلنا</p></div>
+<div class="icon" id="logoutIcon"><i class="fa fa-sign-out-alt"></i><p>خروج</p></div>
 </div>
 </div>
 
 <!-- TASKS -->
 <div class="container hidden" id="tasks">
-<button class="back" onclick="home()">← <span id="backText"></span></button>
+<button class="back"><span id="backText"></span> ← </button>
 <div class="card">
 <h3 id="taskTitle"></h3>
 <p>مهمة واحدة كل 24 ساعة</p>
@@ -140,7 +142,7 @@ p { line-height: 1.6; }
 
 <!-- DEPOSIT -->
 <div class="container hidden" id="deposit">
-<button class="back" onclick="home()">← <span id="backText2"></span></button>
+<button class="back"><span id="backText2"></span> ← </button>
 <div class="card">
 <h3 id="depositTitle"></h3>
 <select id="dMethod">
@@ -154,7 +156,7 @@ p { line-height: 1.6; }
 
 <!-- WITHDRAW -->
 <div class="container hidden" id="withdraw">
-<button class="back" onclick="home()">← <span id="backText3"></span></button>
+<button class="back"><span id="backText3"></span> ← </button>
 <div class="card">
 <h3 id="withdrawTitle"></h3>
 <input id="wAmount" type="number" placeholder="Amount">
@@ -164,13 +166,13 @@ p { line-height: 1.6; }
 
 <!-- LEVELS -->
 <div class="container hidden" id="levels">
-<button class="back" onclick="home()">← <span id="backText4"></span></button>
+<button class="back"><span id="backText4"></span> ← </button>
 <div id="levelList"></div>
 </div>
 
 <!-- PROFILE -->
 <div class="container hidden" id="profile">
-<button class="back" onclick="home()">← <span id="backText5"></span></button>
+<button class="back"><span id="backText5"></span> ← </button>
 <div class="card">
 <p>User: <b id="pName"></b></p>
 <p>Level: <b id="pLvl"></b></p>
@@ -180,7 +182,7 @@ p { line-height: 1.6; }
 
 <!-- ABOUT -->
 <div class="container hidden" id="about">
-<button class="back" onclick="home()">← <span id="backTextAbout">رجوع</span></button>
+<button class="back"><span id="backTextAbout">رجوع</span> ← </button>
 <div class="card">
 <p>منصة Groupe 122 منصة جزائرية مائة بالمائة حقيقية تسعى لتصبح أفضل منصة عالمية للترويج و الإشهار و خلق فرص عمل حقيقية في ظل ما نشهده من تطور اقتصادي رقمي في التجارة والتسويق</p>
 </div>
@@ -188,7 +190,7 @@ p { line-height: 1.6; }
 
 <!-- CONTACT -->
 <div class="container hidden" id="contact">
-<button class="back" onclick="home()">← <span id="backTextContact">رجوع</span></button>
+<button class="back"><span id="backTextContact">رجوع</span> ← </button>
 <div class="card">
 <p>راسلنا على البريد الإلكتروني التالي:</p>
 <p><b>hamadamamado36@gmail.com</b></p>
@@ -196,8 +198,6 @@ p { line-height: 1.6; }
 </div>
 
 <script>
-window.addEventListener('DOMContentLoaded', () => {
-
 const ADMIN_WHATS="213660624409";
 
 const translations={
@@ -218,36 +218,29 @@ depositTitle:"Deposit",depositBtn:"Send",
 withdrawTitle:"Withdraw",withdrawBtn:"Send"}
 };
 
-const loginDiv = document.getElementById("login");
-const homeDiv = document.getElementById("home");
+const loginDiv=document.getElementById("login");
+const homeDiv=document.getElementById("home");
 const levelList = document.getElementById("levelList");
-const balance = document.getElementById("balance");
-const pLevel = document.getElementById("pLevel");
-const referrals = document.getElementById("referrals");
-const pName = document.getElementById("pName");
-const pLvl = document.getElementById("pLvl");
-const pRefs = document.getElementById("pRefs");
-const loginTitle = document.getElementById("loginTitle");
-const loginBtn = document.getElementById("loginBtn");
-const tasksText = document.getElementById("tasksText");
-const depositText = document.getElementById("depositText");
-const withdrawText = document.getElementById("withdrawText");
-const levelsText = document.getElementById("levelsText");
 
+let users=JSON.parse(localStorage.getItem("users")||"{}");
+let current=null;
+
+// تعيين اللغة
 function setLang(l){localStorage.setItem("lang",l);applyLang(l);}
 function applyLang(l){
 document.documentElement.lang=l;
 document.documentElement.dir=l==="ar"?"rtl":"ltr";
 const t=translations[l];
-loginTitle.innerText=t.login;
-loginBtn.innerText=t.loginBtn;
+document.getElementById("loginTitle").innerText=t.login;
+document.getElementById("loginBtn").innerText=t.loginBtn;
 document.getElementById("balLabel").innerText=t.bal;
 document.getElementById("lvlLabel").innerText=t.lvl;
 document.getElementById("refLabel").innerText=t.refs;
-tasksText.innerText=t.tasks;
-depositText.innerText=t.deposit;
-withdrawText.innerText=t.withdraw;
-levelsText.innerText=t.levels;
+document.getElementById("tasksText").innerText=t.tasks;
+document.getElementById("depositText").innerText=t.deposit;
+document.getElementById("withdrawText").innerText=t.withdraw;
+document.getElementById("levelsText").innerText=t.levels;
+document.getElementById("profileText").innerText=t.profile;
 document.getElementById("taskTitle").innerText=t.taskTitle;
 document.getElementById("doTaskBtn").innerText=t.doTask;
 document.getElementById("depositTitle").innerText=t.depositTitle;
@@ -260,11 +253,10 @@ document.getElementById("backText3").innerText=t.back;
 document.getElementById("backText4").innerText=t.back;
 document.getElementById("backText5").innerText=t.back;
 }
+
 applyLang(localStorage.getItem("lang")||"ar");
 
-let users=JSON.parse(localStorage.getItem("users")||"{}");
-let current=null;
-
+// مستويات اللعبة
 const levels=[
 {name:"المستوى التحفيزي",daily:50},
 {name:"المستوى الأول",daily:70},
@@ -275,12 +267,15 @@ const levels=[
 {name:"المستوى السادس",daily:1200}
 ];
 
-function loginFunc(){
-const u=document.getElementById("u").value.trim();
-const p=document.getElementById("p").value;
-if(!u||!p) return alert("Fill data");
+// تسجيل الدخول
+document.getElementById("loginBtn").addEventListener("click", login);
+
+function login(){
+let u=document.getElementById("u").value.trim();
+let p=document.getElementById("p").value;
+if(!u||!p){ alert("Fill data"); return; }
 if(!users[u]) users[u]={p,bal:0,lvl:0,refs:[],task:""};
-if(users[u].p!==p) return alert("Wrong password");
+if(users[u].p!==p){ alert("Wrong password"); return; }
 current=u;
 localStorage.setItem("users",JSON.stringify(users));
 loginDiv.classList.add("hidden");
@@ -289,53 +284,62 @@ update();
 renderLevels();
 }
 
+// تحديث البيانات
 function update(){
-balance.innerText=users[current].bal+" DA";
-pLevel.innerText=levels[users[current].lvl].name;
-referrals.innerText=users[current].refs.length;
-pName.innerText=current;
-pLvl.innerText=levels[users[current].lvl].name;
-pRefs.innerText=users[current].refs.length;
+document.getElementById("balance").innerText=users[current].bal+" DA";
+document.getElementById("pLevel").innerText=levels[users[current].lvl].name;
+document.getElementById("referrals").innerText=users[current].refs.length;
+document.getElementById("pName").innerText=current;
+document.getElementById("pLvl").innerText=levels[users[current].lvl].name;
+document.getElementById("pRefs").innerText=users[current].refs.length;
 localStorage.setItem("users",JSON.stringify(users));
 }
 
+// فتح الصفحات
 function openPage(id){
 document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));
 document.getElementById(id).classList.remove("hidden");
 if(id==="levels") renderLevels();
 }
-function home(){openPage("home");}
 
+// العودة للصفحة الرئيسية
+document.querySelectorAll(".back").forEach(b=>b.addEventListener("click",()=>openPage("home")));
+
+// المهمة اليومية
+document.getElementById("doTaskBtn").addEventListener("click", doTask);
 function doTask(){
 let t=new Date().toDateString();
-if(users[current].task===t) return alert("Already done");
+if(users[current].task===t){ alert("Already done"); return; }
 users[current].task=t;
 users[current].bal+=levels[users[current].lvl].daily;
 update();
 }
 
+// الشحن والسحب يفتح WhatsApp
 function deposit(){ window.open(`https://wa.me/${ADMIN_WHATS}`); }
 function withdraw(){ window.open(`https://wa.me/${ADMIN_WHATS}`); }
+function openSupport(){ window.open(`https://wa.me/${ADMIN_WHATS}`); }
 
-function logout(){
+// الخروج
+document.getElementById("logoutIcon").addEventListener("click", ()=>{
 current=null;
 homeDiv.classList.add("hidden");
 loginDiv.classList.remove("hidden");
-}
+});
 
+// عرض المستويات
 function renderLevels(){
 levelList.innerHTML="";
 levels.forEach(l=>{
 levelList.innerHTML+=`<div class="card"><h3>${l.name}</h3><p>ربح المهمة اليومية: ${l.daily} دج</p><p>كل 24 ساعة مهمة واحدة</p></div>`;
 });
-
-// اختياري: scroll to top
-levelList.scrollTop = 0;
 }
 
-// ربط الزر
-loginBtn.addEventListener("click", loginFunc);
-
+// ربط الأيقونات بعد تحميل DOM
+document.addEventListener("DOMContentLoaded",()=>{
+document.querySelectorAll(".icon[data-target]").forEach(icon=>{
+  icon.addEventListener("click",()=> openPage(icon.dataset.target));
+});
 });
 </script>
 
