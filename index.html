@@ -54,14 +54,14 @@ p{line-height:1.6;}
 </div>
 
 <div class="grid">
-<div class="icon" onclick="openPage('tasks')"><i class="fa fa-list-check"></i><p id="tasksText"></p></div>
-<div class="icon" onclick="openPage('deposit')"><i class="fa fa-coins"></i><p id="depositText"></p></div>
-<div class="icon" onclick="openPage('withdraw')"><i class="fa fa-wallet"></i><p id="withdrawText"></p></div>
-<div class="icon" onclick="openPage('levels')"><i class="fa fa-layer-group"></i><p id="levelsText"></p></div>
-<div class="icon" onclick="openPage('profile')"><i class="fa fa-user"></i><p id="profileText"></p></div>
-<div class="icon" onclick="openPage('about')"><i class="fa fa-circle-info"></i><p id="aboutText"></p></div>
-<div class="icon" onclick="openPage('contact')"><i class="fa fa-envelope"></i><p id="contactText"></p></div>
-<div class="icon" onclick="logout()"><i class="fa fa-sign-out-alt"></i><p id="logoutText"></p></div>
+<div class="icon" id="tasksIcon"><i class="fa fa-list-check"></i><p id="tasksText"></p></div>
+<div class="icon" id="depositIcon"><i class="fa fa-coins"></i><p id="depositText"></p></div>
+<div class="icon" id="withdrawIcon"><i class="fa fa-wallet"></i><p id="withdrawText"></p></div>
+<div class="icon" id="levelsIcon"><i class="fa fa-layer-group"></i><p id="levelsText"></p></div>
+<div class="icon" id="profileIcon"><i class="fa fa-user"></i><p id="profileText"></p></div>
+<div class="icon" id="aboutIcon"><i class="fa fa-circle-info"></i><p id="aboutText"></p></div>
+<div class="icon" id="contactIcon"><i class="fa fa-envelope"></i><p id="contactText"></p></div>
+<div class="icon" id="logoutIcon"><i class="fa fa-sign-out-alt"></i><p id="logoutText"></p></div>
 </div>
 </div>
 
@@ -130,113 +130,9 @@ p{line-height:1.6;}
 
 <script>
 document.addEventListener("DOMContentLoaded", function(){
+
+// ====== البيانات ======
 const ADMIN_WHATS="213660624409";
-
-const translations={
-ar:{login:"تسجيل الدخول",loginBtn:"دخول / تسجيل",bal:"رصيدك",lvl:"مستواك",refs:"إحالاتك",
-tasks:"المهام",deposit:"شحن",withdraw:"سحب",levels:"المستويات",profile:"ملفي",
-back:"رجوع",taskTitle:"المهمة اليومية",doTask:"تنفيذ المهمة",taskInfo:"مهمة واحدة كل 24 ساعة",
-depositTitle:"شحن الرصيد",depositBtn:"إرسال الطلب",
-withdrawTitle:"طلب سحب",withdrawBtn:"إرسال",
-aboutContent:"منصة Groupe 122 منصة جزائرية مائة بالمائة حقيقية تسعى لتصبح أفضل منصة عالمية للترويج و الإشهار و خلق فرص عمل حقيقية.",
-contactInfo:"راسلنا على البريد الإلكتروني التالي: hamadamamado36@gmail.com",
-logoutText:"خروج",
-profileUser:"User: ",profileLevel:"Level: ",profileRefs:"Referrals: "
-},
-fr:{login:"Connexion",loginBtn:"Entrer / S'inscrire",bal:"Solde",lvl:"Niveau",refs:"Parrainages",
-tasks:"Tâches",deposit:"Dépôt",withdraw:"Retrait",levels:"Niveaux",profile:"Profil",
-back:"Retour",taskTitle:"Tâche quotidienne",doTask:"Exécuter",taskInfo:"Une tâche toutes les 24 heures",
-depositTitle:"Dépôt",depositBtn:"Envoyer",
-withdrawTitle:"Retrait",withdrawBtn:"Envoyer",
-aboutContent:"La plateforme Groupe 122 est 100% algérienne et vise à devenir la meilleure plateforme mondiale.",
-contactInfo:"Contactez-nous à l'adresse e-mail suivante: hamadamamado36@gmail.com",
-logoutText:"Déconnexion",
-profileUser:"Utilisateur: ",profileLevel:"Niveau: ",profileRefs:"Parrainages: "
-},
-en:{login:"Login",loginBtn:"Login / Register",bal:"Balance",lvl:"Level",refs:"Referrals",
-tasks:"Tasks",deposit:"Deposit",withdraw:"Withdraw",levels:"Levels",profile:"Profile",
-back:"Back",taskTitle:"Daily Task",doTask:"Execute",taskInfo:"One task every 24 hours",
-depositTitle:"Deposit",depositBtn:"Send",
-withdrawTitle:"Withdraw",withdrawBtn:"Send",
-aboutContent:"Groupe 122 is a 100% Algerian platform aiming to become the best global platform.",
-contactInfo:"Contact us at: hamadamamado36@gmail.com",
-logoutText:"Logout",
-profileUser:"User: ",profileLevel:"Level: ",profileRefs:"Referrals: "
-}
-};
-
-const loginTitle=document.getElementById("loginTitle");
-const loginBtn=document.getElementById("loginBtn");
-const balLabel=document.getElementById("balLabel");
-const lvlLabel=document.getElementById("lvlLabel");
-const refLabel=document.getElementById("refLabel");
-const tasksText=document.getElementById("tasksText");
-const depositText=document.getElementById("depositText");
-const withdrawText=document.getElementById("withdrawText");
-const levelsText=document.getElementById("levelsText");
-const profileText=document.getElementById("profileText");
-const logoutText=document.getElementById("logoutText");
-const taskTitle=document.getElementById("taskTitle");
-const doTaskBtn=document.getElementById("doTaskBtn");
-const taskInfo=document.getElementById("taskInfo");
-const depositTitle=document.getElementById("depositTitle");
-const depositBtn=document.getElementById("depositBtn");
-const withdrawTitle=document.getElementById("withdrawTitle");
-const withdrawBtn=document.getElementById("withdrawBtn");
-const backText=document.getElementById("backText");
-const backText2=document.getElementById("backText2");
-const backText3=document.getElementById("backText3");
-const backText4=document.getElementById("backText4");
-const backText5=document.getElementById("backText5");
-const backTextAbout=document.getElementById("backTextAbout");
-const backTextContact=document.getElementById("backTextContact");
-const aboutContent=document.getElementById("aboutContent");
-const contactInfo=document.getElementById("contactInfo");
-const profileUser=document.getElementById("profileUser");
-const profileLevel=document.getElementById("profileLevel");
-const profileRefs=document.getElementById("profileRefs");
-const levelList=document.getElementById("levelList");
-const loginDiv=document.getElementById("login");
-const homeDiv=document.getElementById("home");
-
-function setLang(l){localStorage.setItem("lang",l);applyLang(l);}
-function applyLang(l){
-document.documentElement.lang=l;
-document.documentElement.dir=l==="ar"?"rtl":"ltr";
-const t=translations[l];
-loginTitle.innerText=t.login;
-loginBtn.innerText=t.loginBtn;
-balLabel.innerText=t.bal;
-lvlLabel.innerText=t.lvl;
-refLabel.innerText=t.refs;
-tasksText.innerText=t.tasks;
-depositText.innerText=t.deposit;
-withdrawText.innerText=t.withdraw;
-levelsText.innerText=t.levels;
-profileText.innerText=t.profile;
-logoutText.innerText=t.logoutText;
-taskTitle.innerText=t.taskTitle;
-doTaskBtn.innerText=t.doTask;
-taskInfo.innerText=t.taskInfo;
-depositTitle.innerText=t.depositTitle;
-depositBtn.innerText=t.depositBtn;
-withdrawTitle.innerText=t.withdrawTitle;
-withdrawBtn.innerText=t.withdrawBtn;
-backText.innerText=t.back;
-backText2.innerText=t.back;
-backText3.innerText=t.back;
-backText4.innerText=t.back;
-backText5.innerText=t.back;
-backTextAbout.innerText=t.back;
-backTextContact.innerText=t.back;
-aboutContent.innerText=t.aboutContent;
-contactInfo.innerText=t.contactInfo;
-profileUser.innerText=t.profileUser;
-profileLevel.innerText=t.profileLevel;
-profileRefs.innerText=t.profileRefs;
-}
-
-applyLang(localStorage.getItem("lang")||"ar");
 
 let users=JSON.parse(localStorage.getItem("users")||"{}");
 let current=null;
@@ -251,63 +147,119 @@ const levels=[
 {name:"المستوى السادس",daily:1200}
 ];
 
+// ====== الترجمة ======
+const translations={
+ar:{login:"تسجيل الدخول",loginBtn:"دخول / تسجيل",bal:"رصيدك",lvl:"مستواك",refs:"إحالاتك",
+tasks:"المهام",deposit:"شحن",withdraw:"سحب",levels:"المستويات",profile:"ملفي",
+back:"رجوع",taskTitle:"المهمة اليومية",doTask:"تنفيذ المهمة",taskInfo:"مهمة واحدة كل 24 ساعة",
+depositTitle:"شحن الرصيد",depositBtn:"إرسال الطلب",
+withdrawTitle:"طلب سحب",withdrawBtn:"إرسال",
+aboutContent:"منصة Groupe 122 منصة جزائرية حقيقية 100٪.",
+contactInfo:"راسلنا: hamadamamado36@gmail.com",
+logoutText:"خروج",
+profileUser:"User: ",profileLevel:"Level: ",profileRefs:"Referrals: "
+},
+fr:{login:"Connexion",loginBtn:"Entrer / S'inscrire",bal:"Solde",lvl:"Niveau",refs:"Parrainages",
+tasks:"Tâches",deposit:"Dépôt",withdraw:"Retrait",levels:"Niveaux",profile:"Profil",
+back:"Retour",taskTitle:"Tâche quotidienne",doTask:"Exécuter",taskInfo:"Une tâche toutes les 24 heures",
+depositTitle:"Dépôt",depositBtn:"Envoyer",
+withdrawTitle:"Retrait",withdrawBtn:"Envoyer",
+aboutContent:"La plateforme Groupe 122 est algérienne 100%.",
+contactInfo:"Contact: hamadamamado36@gmail.com",
+logoutText:"Déconnexion",
+profileUser:"Utilisateur: ",profileLevel:"Niveau: ",profileRefs:"Parrainages: "
+},
+en:{login:"Login",loginBtn:"Login / Register",bal:"Balance",lvl:"Level",refs:"Referrals",
+tasks:"Tasks",deposit:"Deposit",withdraw:"Withdraw",levels:"Levels",profile:"Profile",
+back:"Back",taskTitle:"Daily Task",doTask:"Execute",taskInfo:"One task every 24 hours",
+depositTitle:"Deposit",depositBtn:"Send",
+withdrawTitle:"Withdraw",withdrawBtn:"Send",
+aboutContent:"Groupe 122 is 100% Algerian platform.",
+contactInfo:"Contact: hamadamamado36@gmail.com",
+logoutText:"Logout",
+profileUser:"User: ",profileLevel:"Level: ",profileRefs:"Referrals: "
+}
+};
+
+// ====== عناصر HTML ======
+const getEl=id=>document.getElementById(id);
+
+const loginTitle=getEl("loginTitle"), loginBtn=getEl("loginBtn");
+const balLabel=getEl("balLabel"), lvlLabel=getEl("lvlLabel"), refLabel=getEl("refLabel");
+const tasksText=getEl("tasksText"), depositText=getEl("depositText"), withdrawText=getEl("withdrawText");
+const levelsText=getEl("levelsText"), profileText=getEl("profileText"), logoutTextEl=getEl("logoutText");
+const taskTitle=getEl("taskTitle"), doTaskBtn=getEl("doTaskBtn"), taskInfo=getEl("taskInfo");
+const depositTitle=getEl("depositTitle"), depositBtn=getEl("depositBtn");
+const withdrawTitle=getEl("withdrawTitle"), withdrawBtn=getEl("withdrawBtn");
+const backText=getEl("backText"), backText2=getEl("backText2"), backText3=getEl("backText3");
+const backText4=getEl("backText4"), backText5=getEl("backText5");
+const backTextAbout=getEl("backTextAbout"), backTextContact=getEl("backTextContact");
+const aboutContent=getEl("aboutContent"), contactInfo=getEl("contactInfo");
+const profileUser=getEl("profileUser"), profileLevel=getEl("profileLevel"), profileRefs=getEl("profileRefs");
+const levelList=getEl("levelList");
+const loginDiv=getEl("login"), homeDiv=getEl("home");
+
+// ====== وظائف ======
+function setLang(l){localStorage.setItem("lang",l); applyLang(l);}
+function applyLang(l){
+const t=translations[l]; document.documentElement.lang=l; document.documentElement.dir=l==="ar"?"rtl":"ltr";
+loginTitle.innerText=t.login; loginBtn.innerText=t.loginBtn;
+balLabel.innerText=t.bal; lvlLabel.innerText=t.lvl; refLabel.innerText=t.refs;
+tasksText.innerText=t.tasks; depositText.innerText=t.deposit; withdrawText.innerText=t.withdraw;
+levelsText.innerText=t.levels; profileText.innerText=t.profile; logoutTextEl.innerText=t.logoutText;
+taskTitle.innerText=t.taskTitle; doTaskBtn.innerText=t.doTask; taskInfo.innerText=t.taskInfo;
+depositTitle.innerText=t.depositTitle; depositBtn.innerText=t.depositBtn;
+withdrawTitle.innerText=t.withdrawTitle; withdrawBtn.innerText=t.withdrawBtn;
+backText.innerText=t.back; backText2.innerText=t.back; backText3.innerText=t.back;
+backText4.innerText=t.back; backText5.innerText=t.back; backTextAbout.innerText=t.back;
+backTextContact.innerText=t.back; aboutContent.innerText=t.aboutContent; contactInfo.innerText=t.contactInfo;
+profileUser.innerText=t.profileUser; profileLevel.innerText=t.profileLevel; profileRefs.innerText=t.profileRefs;
+}
+applyLang(localStorage.getItem("lang")||"ar");
+
 function login(){
-let u=document.getElementById("u").value.trim();
-let p=document.getElementById("p").value;
+let u=getEl("u").value.trim(), p=getEl("p").value;
 if(!u||!p) return alert("Fill data");
 if(!users[u]) users[u]={p,bal:0,lvl:0,refs:[],task:""};
 if(users[u].p!==p) return alert("Wrong password");
-current=u;
-localStorage.setItem("users",JSON.stringify(users));
-loginDiv.classList.add("hidden");
-homeDiv.classList.remove("hidden");
-update();
-renderLevels();
+current=u; localStorage.setItem("users",JSON.stringify(users));
+loginDiv.classList.add("hidden"); homeDiv.classList.remove("hidden");
+update(); renderLevels();
 }
-
 function update(){
-balance.innerText=users[current].bal+" DA";
-pLevel.innerText=levels[users[current].lvl].name;
-referrals.innerText=users[current].refs.length;
+getEl("balance").innerText=users[current].bal+" DA";
+getEl("pLevel").innerText=levels[users[current].lvl].name;
+getEl("referrals").innerText=users[current].refs.length;
 profileUser.innerText="User: "+current;
 profileLevel.innerText="Level: "+levels[users[current].lvl].name;
 profileRefs.innerText="Referrals: "+users[current].refs.length;
 localStorage.setItem("users",JSON.stringify(users));
 }
-
 function openPage(id){
 document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));
-document.getElementById(id).classList.remove("hidden");
+getEl(id).classList.remove("hidden");
 if(id==="levels") renderLevels();
 }
-
 function home(){openPage("home");}
+function doTask(){let t=new Date().toDateString(); if(users[current].task===t) return alert("Already done"); users[current].task=t; users[current].bal+=levels[users[current].lvl].daily; update();}
+function deposit(){window.open(`https://wa.me/${ADMIN_WHATS}`);}
+function withdraw(){window.open(`https://wa.me/${ADMIN_WHATS}`);}
+function logout(){current=null; homeDiv.classList.add("hidden"); loginDiv.classList.remove("hidden");}
+function renderLevels(){levelList.innerHTML=""; levels.forEach(l=>{levelList.innerHTML+=`<div class="card"><h3>${l.name}</h3><p>ربح المهمة اليومية: ${l.daily} دج</p><p>كل 24 ساعة مهمة واحدة</p></div>`;});}
 
-function doTask(){
-let t=new Date().toDateString();
-if(users[current].task===t) return alert("Already done");
-users[current].task=t;
-users[current].bal+=levels[users[current].lvl].daily;
-update();
-}
-
-function deposit(){ window.open(`https://wa.me/${ADMIN_WHATS}`); }
-function withdraw(){ window.open(`https://wa.me/${ADMIN_WHATS}`); }
-
-function logout(){
-current=null;
-homeDiv.classList.add("hidden");
-loginDiv.classList.remove("hidden");
-}
-
-function renderLevels(){
-levelList.innerHTML="";
-levels.forEach(l=>{
-levelList.innerHTML+=`<div class="card"><h3>${l.name}</h3><p>ربح المهمة اليومية: ${l.daily} دج</p><p>كل 24 ساعة مهمة واحدة</p></div>`;
-});
-}
+// ====== أيقونات تستجيب ======
+getEl("tasksIcon").onclick=()=>openPage("tasks");
+getEl("depositIcon").onclick=()=>openPage("deposit");
+getEl("withdrawIcon").onclick=()=>openPage("withdraw");
+getEl("levelsIcon").onclick=()=>openPage("levels");
+getEl("profileIcon").onclick=()=>openPage("profile");
+getEl("aboutIcon").onclick=()=>openPage("about");
+getEl("contactIcon").onclick=()=>openPage("contact");
+getEl("logoutIcon").onclick=logout;
+loginBtn.onclick=login;
 
 });
 </script>
+
 </body>
 </html>
