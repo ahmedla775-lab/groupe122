@@ -8,45 +8,70 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
+/* ===== BODY & GENERAL ===== */
 body{
   margin:0;
   font-family:system-ui;
-  background:#0f172a;
-  color:#fff;
+  background:#0d1117; /* لون داكن أكثر أناقة */
+  color:#e0e0e0;
   font-size:18px
 }
 .hidden{display:none}
+
+/* ===== HEADER ===== */
 header{
   padding:16px;
-  background:#020617;
+  background:#121826; /* لون أغمق قليلًا */
   display:flex;
   justify-content:space-between;
   align-items:center
 }
+
+/* ===== CONTAINERS ===== */
 .container{padding:20px}
 .card{
-  background:#020617;
+  background:#1f2937; /* لون البطاقة متوسط مع تباين جيد */
   border-radius:18px;
   padding:20px;
-  margin-bottom:18px
+  margin-bottom:18px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4); /* ظل خفيف */
 }
+
+/* ===== GRID ===== */
 .grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:18px
 }
+
+/* ===== ICONS ===== */
 .icon{
-  background:#020617;
+  background:#1f2937;
   border-radius:18px;
   padding:25px;
-  text-align:center
+  text-align:center;
+  transition: transform 0.2s, background 0.2s;
 }
 .icon i{
-  font-size:34px;
-  color:#38bdf8;
-  margin-bottom:10px
+  font-size:36px; /* أكبر قليلاً */
+  color:#0ea5e9; /* أزرق سماوي جذاب */
+  margin-bottom:10px;
 }
-.icon p{font-size:16px}
+.icon p{
+  font-size:16px;
+  margin:0;
+  color:#e0e0e0;
+}
+.icon:hover{
+  background:#0ea5e9; /* عند المرور، يصبح خلفية أزرق */
+  color:#020617;
+  transform: translateY(-4px);
+}
+.icon:hover i{
+  color:#fff;
+}
+
+/* ===== BUTTONS ===== */
 .main{
   width:100%;
   padding:15px;
@@ -54,32 +79,56 @@ header{
   border-radius:14px;
   font-size:18px;
   font-weight:bold;
-  background:#38bdf8;
-  color:#020617
+  background:#0ea5e9; /* أزرق سماوي */
+  color:#020617;
+  transition: background 0.2s;
 }
+.main:hover{
+  background:#0284c7; /* أزرق أغمق عند المرور */
+  cursor:pointer;
+}
+
+/* ===== INPUTS ===== */
 input,select{
   width:100%;
   padding:12px;
   border-radius:10px;
   border:none;
-  margin:8px 0
+  margin:8px 0;
+  background:#2c3a4a;
+  color:#fff;
 }
+
+/* ===== BACK BUTTON ===== */
 .back{
   background:none;
   border:none;
-  color:#38bdf8;
+  color:#0ea5e9;
   margin-bottom:10px;
-  font-size:16px
+  font-size:16px;
+  cursor:pointer;
 }
+.back:hover{
+  text-decoration:underline;
+}
+
+/* ===== LANGUAGE BUTTONS ===== */
 .lang button{
   background:none;
-  border:1px solid #38bdf8;
-  color:#38bdf8;
+  border:1px solid #0ea5e9;
+  color:#0ea5e9;
   margin:0 3px;
   padding:5px 10px;
-  border-radius:6px
+  border-radius:6px;
+  transition: background 0.2s,color 0.2s;
 }
-h3{font-size:22px;text-align:center}
+.lang button:hover{
+  background:#0ea5e9;
+  color:#fff;
+}
+
+/* ===== TEXTS ===== */
+h3{font-size:22px;text-align:center;margin-bottom:12px}
 p{line-height:1.6}
 </style>
 </head>
@@ -176,7 +225,6 @@ p{line-height:1.6}
 
 <script>
 const ADMIN_WHATS="213660624409";
-
 const translations={
 ar:{login:"تسجيل الدخول",loginBtn:"دخول / تسجيل",bal:"رصيدك",lvl:"مستواك",refs:"إحالاتك",
 tasks:"المهام",deposit:"شحن",withdraw:"سحب",levels:"المستويات",profile:"ملفي",support:"الدعم",
@@ -197,9 +245,9 @@ withdrawTitle:"Withdraw",withdrawBtn:"Send"}
 
 function setLang(l){localStorage.setItem("lang",l);applyLang(l);}
 function applyLang(l){
+const t=translations[l];
 document.documentElement.lang=l;
 document.documentElement.dir=l==="ar"?"rtl":"ltr";
-const t=translations[l];
 loginTitle.innerText=t.login;
 loginBtn.innerText=t.loginBtn;
 balLabel.innerText=t.bal;
@@ -225,9 +273,8 @@ backText5.innerText=t.back;
 }
 applyLang(localStorage.getItem("lang")||"ar");
 
-// ===== بيانات المستخدم =====
-let users = JSON.parse(localStorage.getItem("users")||"{}");
-let current = null;
+let users=JSON.parse(localStorage.getItem("users")||"{}");
+let current=null;
 
 const levels=[
 {name:"Trial",daily:50},
@@ -236,65 +283,62 @@ const levels=[
 {name:"Level 3",daily:500}
 ];
 
-const loginDiv = document.getElementById("login");
-const homeDiv = document.getElementById("home");
+const loginDiv=document.getElementById("login");
+const homeDiv=document.getElementById("home");
 
-// ===== دوال المنصة =====
 function login(){
-  let u = document.getElementById("u").value.trim();
-  let p = document.getElementById("p").value;
-  if(!u || !p) return alert("Fill data");
-
-  if(!users[u]) users[u] = {p, bal:0, lvl:0, refs:[], task:""};
-  if(users[u].p !== p) return alert("Wrong password");
-
-  current = u;
-  localStorage.setItem("users", JSON.stringify(users));
-  loginDiv.classList.add("hidden");
-  homeDiv.classList.remove("hidden");
-  update();
-  renderLevels();
+let u=document.getElementById("u").value.trim();
+let p=document.getElementById("p").value;
+if(!u||!p)return alert("Fill data");
+if(!users[u])users[u]={p,bal:0,lvl:0,refs:[],task:""};
+if(users[u].p!==p)return alert("Wrong password");
+current=u;
+localStorage.setItem("users",JSON.stringify(users));
+loginDiv.classList.add("hidden");
+homeDiv.classList.remove("hidden");
+update();
+renderLevels();
 }
 
 function update(){
-  balance.innerText = users[current].bal+" DA";
-  pLevel.innerText = levels[users[current].lvl].name;
-  referrals.innerText = users[current].refs.length;
-  pName.innerText = current;
-  pLvl.innerText = levels[users[current].lvl].name;
-  pRefs.innerText = users[current].refs.length;
-  localStorage.setItem("users", JSON.stringify(users));
+balance.innerText=users[current].bal+" DA";
+pLevel.innerText=levels[users[current].lvl].name;
+referrals.innerText=users[current].refs.length;
+pName.innerText=current;
+pLvl.innerText=levels[users[current].lvl].name;
+pRefs.innerText=users[current].refs.length;
+localStorage.setItem("users",JSON.stringify(users));
 }
 
 function openPage(id){
-  document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));
-  document.getElementById(id).classList.remove("hidden");
+document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));
+document.getElementById(id).classList.remove("hidden");
 }
 function home(){openPage("home");}
 
 function doTask(){
-  let t = new Date().toDateString();
-  if(users[current].task === t) return alert("Already done");
-  users[current].task = t;
-  users[current].bal += levels[users[current].lvl].daily;
-  update();
+let t=new Date().toDateString();
+if(users[current].task===t)return alert("Already done");
+users[current].task=t;
+users[current].bal+=levels[users[current].lvl].daily;
+update();
 }
 
 function deposit(){
-  window.open(`https://wa.me/${ADMIN_WHATS}`);
+window.open(`https://wa.me/${ADMIN_WHATS}`);
 }
 function withdraw(){
-  window.open(`https://wa.me/${ADMIN_WHATS}`);
+window.open(`https://wa.me/${ADMIN_WHATS}`);
 }
 function openSupport(){
-  window.open(`https://wa.me/${ADMIN_WHATS}`);
+window.open(`https://wa.me/${ADMIN_WHATS}`);
 }
 
 function renderLevels(){
-  levelList.innerHTML="";
-  levels.forEach(l=>{
-    levelList.innerHTML+=`<div class="card"><h3>${l.name}</h3><p>Daily profit: ${l.daily} DA</p></div>`;
-  });
+levelList.innerHTML="";
+levels.forEach(l=>{
+levelList.innerHTML+=`<div class="card"><h3>${l.name}</h3><p>Daily profit: ${l.daily} DA</p></div>`;
+});
 }
 </script>
 
