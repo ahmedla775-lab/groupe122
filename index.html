@@ -8,70 +8,54 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
-/* ===== BODY & GENERAL ===== */
 body{
   margin:0;
   font-family:system-ui;
-  background:#0d1117; /* لون داكن أكثر أناقة */
-  color:#e0e0e0;
-  font-size:18px
+  background:#000000; /* أسود */
+  color:#FFFFFF; /* أبيض للنصوص */
+  font-size:18px;
 }
 .hidden{display:none}
-
-/* ===== HEADER ===== */
 header{
   padding:16px;
-  background:#121826; /* لون أغمق قليلًا */
+  background:#111111;
   display:flex;
   justify-content:space-between;
-  align-items:center
+  align-items:center;
+  border-bottom: 2px solid #FFD700; /* خط ذهبي */
 }
-
-/* ===== CONTAINERS ===== */
 .container{padding:20px}
 .card{
-  background:#1f2937; /* لون البطاقة متوسط مع تباين جيد */
+  background:#111111; /* أسود داكن */
   border-radius:18px;
   padding:20px;
   margin-bottom:18px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.4); /* ظل خفيف */
+  border: 1px solid #FFD700; /* ذهبي */
 }
-
-/* ===== GRID ===== */
 .grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
-  gap:18px
+  gap:18px;
 }
-
-/* ===== ICONS ===== */
 .icon{
-  background:#1f2937;
+  background:#111111;
   border-radius:18px;
   padding:25px;
   text-align:center;
-  transition: transform 0.2s, background 0.2s;
+  border:1px solid #FFD700; /* ذهبي */
+  transition: all 0.3s ease;
+  cursor:pointer;
 }
 .icon i{
-  font-size:36px; /* أكبر قليلاً */
-  color:#0ea5e9; /* أزرق سماوي جذاب */
+  font-size:34px;
+  color:#FFD700; /* ذهبي */
   margin-bottom:10px;
+  transition: all 0.3s ease;
 }
-.icon p{
-  font-size:16px;
-  margin:0;
-  color:#e0e0e0;
+.icon:hover i, .icon:hover p{
+  color:#00FF00; /* أخضر عند hover */
 }
-.icon:hover{
-  background:#0ea5e9; /* عند المرور، يصبح خلفية أزرق */
-  color:#020617;
-  transform: translateY(-4px);
-}
-.icon:hover i{
-  color:#fff;
-}
-
-/* ===== BUTTONS ===== */
+.icon p{font-size:16px;color:#FFFFFF;}
 .main{
   width:100%;
   padding:15px;
@@ -79,60 +63,53 @@ header{
   border-radius:14px;
   font-size:18px;
   font-weight:bold;
-  background:#0ea5e9; /* أزرق سماوي */
-  color:#020617;
-  transition: background 0.2s;
+  background:#FFD700; /* ذهبي */
+  color:#000000;
+  transition: all 0.3s ease;
 }
 .main:hover{
-  background:#0284c7; /* أزرق أغمق عند المرور */
-  cursor:pointer;
+  background:#00FF00; /* أخضر عند hover */
+  color:#000000;
 }
-
-/* ===== INPUTS ===== */
 input,select{
   width:100%;
   padding:12px;
   border-radius:10px;
   border:none;
   margin:8px 0;
-  background:#2c3a4a;
-  color:#fff;
+  background:#222222;
+  color:#FFFFFF;
 }
-
-/* ===== BACK BUTTON ===== */
 .back{
   background:none;
   border:none;
-  color:#0ea5e9;
+  color:#FFD700; /* ذهبي */
   margin-bottom:10px;
   font-size:16px;
   cursor:pointer;
 }
 .back:hover{
-  text-decoration:underline;
+  color:#00FF00; /* أخضر */
 }
-
-/* ===== LANGUAGE BUTTONS ===== */
 .lang button{
   background:none;
-  border:1px solid #0ea5e9;
-  color:#0ea5e9;
+  border:1px solid #FFD700;
+  color:#FFD700;
   margin:0 3px;
   padding:5px 10px;
   border-radius:6px;
-  transition: background 0.2s,color 0.2s;
+  cursor:pointer;
 }
 .lang button:hover{
-  background:#0ea5e9;
-  color:#fff;
+  background:#FFD700;
+  color:#000000;
 }
-
-/* ===== TEXTS ===== */
-h3{font-size:22px;text-align:center;margin-bottom:12px}
-p{line-height:1.6}
+h3{font-size:22px;text-align:center;color:#FFD700;}
+p{line-height:1.6;}
+.success{color:#00FF00;}
+.error{color:#FF0000;}
 </style>
 </head>
-
 <body>
 
 <header>
@@ -158,9 +135,9 @@ p{line-height:1.6}
 <!-- HOME -->
 <div class="container hidden" id="home">
 <div class="card">
-<p><span id="balLabel"></span>: <b id="balance">0 DA</b></p>
+<p><span id="balLabel"></span>: <b id="balance" class="success">0 DA</b></p>
 <p><span id="lvlLabel"></span>: <b id="pLevel"></b></p>
-<p><span id="refLabel"></span>: <b id="referrals">0</b></p>
+<p><span id="refLabel"></span>: <b id="referrals"></b></p>
 </div>
 
 <div class="grid">
@@ -225,6 +202,7 @@ p{line-height:1.6}
 
 <script>
 const ADMIN_WHATS="213660624409";
+
 const translations={
 ar:{login:"تسجيل الدخول",loginBtn:"دخول / تسجيل",bal:"رصيدك",lvl:"مستواك",refs:"إحالاتك",
 tasks:"المهام",deposit:"شحن",withdraw:"سحب",levels:"المستويات",profile:"ملفي",support:"الدعم",
@@ -245,9 +223,9 @@ withdrawTitle:"Withdraw",withdrawBtn:"Send"}
 
 function setLang(l){localStorage.setItem("lang",l);applyLang(l);}
 function applyLang(l){
-const t=translations[l];
 document.documentElement.lang=l;
 document.documentElement.dir=l==="ar"?"rtl":"ltr";
+const t=translations[l];
 loginTitle.innerText=t.login;
 loginBtn.innerText=t.loginBtn;
 balLabel.innerText=t.bal;
@@ -283,9 +261,6 @@ const levels=[
 {name:"Level 3",daily:500}
 ];
 
-const loginDiv=document.getElementById("login");
-const homeDiv=document.getElementById("home");
-
 function login(){
 let u=document.getElementById("u").value.trim();
 let p=document.getElementById("p").value;
@@ -294,8 +269,8 @@ if(!users[u])users[u]={p,bal:0,lvl:0,refs:[],task:""};
 if(users[u].p!==p)return alert("Wrong password");
 current=u;
 localStorage.setItem("users",JSON.stringify(users));
-loginDiv.classList.add("hidden");
-homeDiv.classList.remove("hidden");
+document.getElementById("login").classList.add("hidden");
+document.getElementById("home").classList.remove("hidden");
 update();
 renderLevels();
 }
@@ -337,7 +312,7 @@ window.open(`https://wa.me/${ADMIN_WHATS}`);
 function renderLevels(){
 levelList.innerHTML="";
 levels.forEach(l=>{
-levelList.innerHTML+=`<div class="card"><h3>${l.name}</h3><p>Daily profit: ${l.daily} DA</p></div>`;
+levelList.innerHTML+=`<div class="card"><h3>${l.name}</h3><p>Daily profit: <span class="success">${l.daily} DA</span></p></div>`;
 });
 }
 </script>
