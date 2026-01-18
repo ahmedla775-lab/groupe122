@@ -4,33 +4,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Groupe des 22</title>
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 <style>
 body{
   margin:0;
   font-family:system-ui;
-  background:#000000; /* أسود */
-  color:#FFFFFF; /* أبيض للنصوص */
+  background:#000; /* أسود */
+  color:#fff;
   font-size:18px;
 }
 .hidden{display:none}
 header{
   padding:16px;
-  background:#111111;
+  background:#222; /* داكن أكثر */
   display:flex;
   justify-content:space-between;
   align-items:center;
-  border-bottom: 2px solid #FFD700; /* خط ذهبي */
 }
 .container{padding:20px}
 .card{
-  background:#111111; /* أسود داكن */
+  background:#111; /* أسود داكن */
   border-radius:18px;
   padding:20px;
   margin-bottom:18px;
-  border: 1px solid #FFD700; /* ذهبي */
+  border:2px solid #FFD700; /* ذهبي */
 }
 .grid{
   display:grid;
@@ -38,24 +35,23 @@ header{
   gap:18px;
 }
 .icon{
-  background:#111111;
+  background:#111;
   border-radius:18px;
   padding:25px;
   text-align:center;
-  border:1px solid #FFD700; /* ذهبي */
-  transition: all 0.3s ease;
+  border:2px solid #FFD700;
   cursor:pointer;
+  transition:0.3s;
+}
+.icon:hover{
+  background:#222;
 }
 .icon i{
   font-size:34px;
   color:#FFD700; /* ذهبي */
   margin-bottom:10px;
-  transition: all 0.3s ease;
 }
-.icon:hover i, .icon:hover p{
-  color:#00FF00; /* أخضر عند hover */
-}
-.icon p{font-size:16px;color:#FFFFFF;}
+.icon p{font-size:16px}
 .main{
   width:100%;
   padding:15px;
@@ -63,13 +59,9 @@ header{
   border-radius:14px;
   font-size:18px;
   font-weight:bold;
-  background:#FFD700; /* ذهبي */
-  color:#000000;
-  transition: all 0.3s ease;
-}
-.main:hover{
-  background:#00FF00; /* أخضر عند hover */
-  color:#000000;
+  background:#228B22; /* أخضر */
+  color:#fff;
+  cursor:pointer;
 }
 input,select{
   width:100%;
@@ -77,19 +69,14 @@ input,select{
   border-radius:10px;
   border:none;
   margin:8px 0;
-  background:#222222;
-  color:#FFFFFF;
 }
 .back{
   background:none;
   border:none;
-  color:#FFD700; /* ذهبي */
+  color:#FF4500; /* أحمر */
   margin-bottom:10px;
   font-size:16px;
   cursor:pointer;
-}
-.back:hover{
-  color:#00FF00; /* أخضر */
 }
 .lang button{
   background:none;
@@ -100,16 +87,11 @@ input,select{
   border-radius:6px;
   cursor:pointer;
 }
-.lang button:hover{
-  background:#FFD700;
-  color:#000000;
-}
-h3{font-size:22px;text-align:center;color:#FFD700;}
-p{line-height:1.6;}
-.success{color:#00FF00;}
-.error{color:#FF0000;}
+h3{font-size:22px;text-align:center}
+p{line-height:1.6}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -135,9 +117,9 @@ p{line-height:1.6;}
 <!-- HOME -->
 <div class="container hidden" id="home">
 <div class="card">
-<p><span id="balLabel"></span>: <b id="balance" class="success">0 DA</b></p>
+<p><span id="balLabel"></span>: <b id="balance">0 دج</b></p>
 <p><span id="lvlLabel"></span>: <b id="pLevel"></b></p>
-<p><span id="refLabel"></span>: <b id="referrals"></b></p>
+<p><span id="refLabel"></span>: <b id="referrals">0</b></p>
 </div>
 
 <div class="grid">
@@ -186,36 +168,9 @@ p{line-height:1.6;}
 
 <!-- LEVELS -->
 <div class="container hidden" id="levels">
-  <button class="back" onclick="home()">← <span id="backText4"></span></button>
-  <div id="levelList"></div>
+<button class="back" onclick="home()">← <span id="backText4"></span></button>
+<div id="levelList"></div>
 </div>
-
-<script>
-const levels=[
-  {name:"المستوى التحفيزي", deposit:0, reward:50, duration:10},
-  {name:"المستوى الأول", deposit:2500, reward:70, duration:90},
-  {name:"المستوى الثاني", deposit:5200, reward:160, duration:120},
-  {name:"المستوى الثالث", deposit:15100, reward:400, duration:150},
-  {name:"المستوى الرابع", deposit:22200, reward:650, duration:180},
-  {name:"المستوى الخامس", deposit:30300, reward:900, duration:270},
-  {name:"المستوى السادس", deposit:40400, reward:1200, duration:360}
-];
-
-function renderLevels(){
-  const container=document.getElementById("levelList");
-  container.innerHTML="";
-  levels.forEach(l=>{
-    container.innerHTML+=`
-      <div class="card">
-        <h3>${l.name}</h3>
-        <p>الإيداع: ${l.deposit} دج</p>
-        <p>مقابل كل مهمة: ${l.reward} دج لمدة ${l.duration} يوم</p>
-        <p>مهمة واحدة كل 24 ساعة</p>
-      </div>
-    `;
-  });
-}
-</script>
 
 <!-- PROFILE -->
 <div class="container hidden" id="profile">
@@ -282,10 +237,13 @@ let users=JSON.parse(localStorage.getItem("users")||"{}");
 let current=null;
 
 const levels=[
-{name:"Trial",daily:50},
-{name:"Level 1",daily:100},
-{name:"Level 2",daily:200},
-{name:"Level 3",daily:500}
+  {name:"المستوى التحفيزي", deposit:0, reward:50, duration:10},
+  {name:"المستوى الأول", deposit:2500, reward:70, duration:90},
+  {name:"المستوى الثاني", deposit:5200, reward:160, duration:120},
+  {name:"المستوى الثالث", deposit:15100, reward:400, duration:150},
+  {name:"المستوى الرابع", deposit:22200, reward:650, duration:180},
+  {name:"المستوى الخامس", deposit:30300, reward:900, duration:270},
+  {name:"المستوى السادس", deposit:40400, reward:1200, duration:360}
 ];
 
 function login(){
@@ -303,11 +261,11 @@ renderLevels();
 }
 
 function update(){
-balance.innerText=users[current].bal+" DA";
-pLevel.innerText=levels[users[current].lvl].name;
+balance.innerText=users[current].bal+" دج";
+pLevel.innerText=levels[users[current].lvl]?.name || "المستوى التحفيزي";
 referrals.innerText=users[current].refs.length;
 pName.innerText=current;
-pLvl.innerText=levels[users[current].lvl].name;
+pLvl.innerText=levels[users[current].lvl]?.name || "المستوى التحفيزي";
 pRefs.innerText=users[current].refs.length;
 localStorage.setItem("users",JSON.stringify(users));
 }
@@ -322,7 +280,7 @@ function doTask(){
 let t=new Date().toDateString();
 if(users[current].task===t)return alert("Already done");
 users[current].task=t;
-users[current].bal+=levels[users[current].lvl].daily;
+users[current].bal+=levels[users[current].lvl].reward;
 update();
 }
 
@@ -337,9 +295,17 @@ window.open(`https://wa.me/${ADMIN_WHATS}`);
 }
 
 function renderLevels(){
-levelList.innerHTML="";
+const container=document.getElementById("levelList");
+container.innerHTML="";
 levels.forEach(l=>{
-levelList.innerHTML+=`<div class="card"><h3>${l.name}</h3><p>Daily profit: <span class="success">${l.daily} DA</span></p></div>`;
+  container.innerHTML+=`
+    <div class="card">
+      <h3>${l.name}</h3>
+      <p>الإيداع: ${l.deposit} دج</p>
+      <p>مقابل كل مهمة: ${l.reward} دج لمدة ${l.duration} يوم</p>
+      <p>مهمة واحدة كل 24 ساعة</p>
+    </div>
+  `;
 });
 }
 </script>
