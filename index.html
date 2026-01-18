@@ -4,102 +4,36 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Groupe des 22</title>
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 <style>
-body {
-  margin: 0;
-  font-family: system-ui;
-  background: #0f172a;
-  color: #fff;
-  font-size: 18px;
-}
-.hidden { display: none; }
-header {
-  padding: 16px;
-  background: #020617;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.container { padding: 20px; }
-.card {
-  background: #020617;
-  border-radius: 18px;
-  padding: 20px;
-  margin-bottom: 18px;
-}
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 18px;
-}
-.icon {
-  background: #020617;
-  border-radius: 18px;
-  padding: 25px;
-  text-align: center;
-  cursor: pointer;
-}
-.icon i {
-  font-size: 34px;
-  color: #FFD700;
-  margin-bottom: 10px;
-}
-.icon p { font-size: 16px; }
-.main {
-  width: 100%;
-  padding: 15px;
-  border: none;
-  border-radius: 14px;
-  font-size: 18px;
-  font-weight: bold;
-  background: #FFD700;
-  color: #020617;
-  cursor: pointer;
-}
-input, select {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  margin: 8px 0;
-}
-.back {
-  background: none;
-  border: none;
-  color: #FFD700;
-  margin-bottom: 10px;
-  font-size: 16px;
-  cursor: pointer;
-}
-.lang button {
-  background: none;
-  border: 1px solid #FFD700;
-  color: #FFD700;
-  margin: 0 3px;
-  padding: 5px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-h3 { font-size: 22px; text-align: center; }
-p { line-height: 1.6; }
+body { margin:0;font-family:system-ui;background:#0f172a;color:#fff;font-size:18px;}
+.hidden { display:none; }
+header { padding:16px; background:#020617; display:flex; justify-content:space-between; align-items:center;}
+.container { padding:20px; }
+.card { background:#020617; border-radius:18px; padding:20px; margin-bottom:18px; }
+.grid { display:grid; grid-template-columns:repeat(2,1fr); gap:18px;}
+.icon { background:#020617; border-radius:18px; padding:25px; text-align:center; cursor:pointer; }
+.icon i { font-size:34px; color:#FFD700; margin-bottom:10px; }
+.icon p { font-size:16px; }
+.main { width:100%; padding:15px; border:none; border-radius:14px; font-size:18px; font-weight:bold; background:#FFD700; color:#020617; cursor:pointer; }
+input, select { width:100%; padding:12px; border-radius:10px; border:none; margin:8px 0; }
+.back { background:none; border:none; color:#FFD700; margin-bottom:10px; font-size:16px; cursor:pointer; }
+.lang button { background:none; border:1px solid #FFD700; color:#FFD700; margin:0 3px; padding:5px 10px; border-radius:6px; cursor:pointer; }
+h3 { font-size:22px; text-align:center; }
+p { line-height:1.6; }
 </style>
 </head>
-
 <body>
 
 <header>
 <h3>Groupe des 22</h3>
 <div class="lang">
-<button onclick="setLang('ar')">AR</button>
-<button onclick="setLang('fr')">FR</button>
-<button onclick="setLang('en')">EN</button>
+<button id="btnAR">AR</button>
+<button id="btnFR">FR</button>
+<button id="btnEN">EN</button>
 </div>
 </header>
 
-<!-- LOGIN -->
 <div class="container" id="login">
 <div class="card">
 <h3 id="loginTitle"></h3>
@@ -110,29 +44,26 @@ p { line-height: 1.6; }
 </div>
 </div>
 
-<!-- HOME -->
 <div class="container hidden" id="home">
 <div class="card">
 <p><span id="balLabel"></span>: <b id="balance">0 DA</b></p>
 <p><span id="lvlLabel"></span>: <b id="pLevel"></b></p>
 <p><span id="refLabel"></span>: <b id="referrals">0</b></p>
 </div>
-
 <div class="grid">
-<div class="icon" onclick="openPage('tasks')"><i class="fa fa-list-check"></i><p id="tasksText"></p></div>
-<div class="icon" onclick="openPage('deposit')"><i class="fa fa-coins"></i><p id="depositText"></p></div>
-<div class="icon" onclick="openPage('withdraw')"><i class="fa fa-wallet"></i><p id="withdrawText"></p></div>
-<div class="icon" onclick="openPage('levels')"><i class="fa fa-layer-group"></i><p id="levelsText"></p></div>
-<div class="icon" onclick="openPage('profile')"><i class="fa fa-user"></i><p id="profileText"></p></div>
-<div class="icon" onclick="openPage('about')"><i class="fa fa-circle-info"></i><p id="aboutText"></p></div>
-<div class="icon" onclick="openPage('contact')"><i class="fa fa-envelope"></i><p id="contactText"></p></div>
-<div class="icon" onclick="logout()"><i class="fa fa-sign-out-alt"></i><p id="logoutText"></p></div>
+<div class="icon" id="iconTasks"><i class="fa fa-list-check"></i><p id="tasksText"></p></div>
+<div class="icon" id="iconDeposit"><i class="fa fa-coins"></i><p id="depositText"></p></div>
+<div class="icon" id="iconWithdraw"><i class="fa fa-wallet"></i><p id="withdrawText"></p></div>
+<div class="icon" id="iconLevels"><i class="fa fa-layer-group"></i><p id="levelsText"></p></div>
+<div class="icon" id="iconProfile"><i class="fa fa-user"></i><p id="profileText"></p></div>
+<div class="icon" id="iconAbout"><i class="fa fa-circle-info"></i><p id="aboutText"></p></div>
+<div class="icon" id="iconContact"><i class="fa fa-envelope"></i><p id="contactText"></p></div>
+<div class="icon" id="iconLogout"><i class="fa fa-sign-out-alt"></i><p id="logoutText"></p></div>
 </div>
 </div>
 
-<!-- TASKS -->
 <div class="container hidden" id="tasks">
-<button class="back" onclick="home()">← <span id="backText"></span></button>
+<button class="back" id="backTasks">← </button>
 <div class="card">
 <h3 id="taskTitle"></h3>
 <p id="taskInfo"></p>
@@ -140,23 +71,18 @@ p { line-height: 1.6; }
 </div>
 </div>
 
-<!-- DEPOSIT -->
 <div class="container hidden" id="deposit">
-<button class="back" onclick="home()">← <span id="backText2"></span></button>
+<button class="back" id="backDeposit">← </button>
 <div class="card">
 <h3 id="depositTitle"></h3>
-<select id="dMethod">
-<option>USDT</option>
-<option>DZD</option>
-</select>
+<select id="dMethod"><option>USDT</option><option>DZD</option></select>
 <input id="dAmount" type="number" placeholder="Amount">
 <button class="main" id="depositBtn"></button>
 </div>
 </div>
 
-<!-- WITHDRAW -->
 <div class="container hidden" id="withdraw">
-<button class="back" onclick="home()">← <span id="backText3"></span></button>
+<button class="back" id="backWithdraw">← </button>
 <div class="card">
 <h3 id="withdrawTitle"></h3>
 <input id="wAmount" type="number" placeholder="Amount">
@@ -164,15 +90,13 @@ p { line-height: 1.6; }
 </div>
 </div>
 
-<!-- LEVELS -->
 <div class="container hidden" id="levels">
-<button class="back" onclick="home()">← <span id="backText4"></span></button>
+<button class="back" id="backLevels">← </button>
 <div id="levelList"></div>
 </div>
 
-<!-- PROFILE -->
 <div class="container hidden" id="profile">
-<button class="back" onclick="home()">← <span id="backText5"></span></button>
+<button class="back" id="backProfile">← </button>
 <div class="card">
 <p id="profileUser"></p>
 <p id="profileLevel"></p>
@@ -180,67 +104,36 @@ p { line-height: 1.6; }
 </div>
 </div>
 
-<!-- ABOUT -->
 <div class="container hidden" id="about">
-<button class="back" onclick="home()">← <span id="backTextAbout"></span></button>
-<div class="card">
-<p id="aboutContent"></p>
-</div>
+<button class="back" id="backAbout">← </button>
+<div class="card"><p id="aboutContent"></p></div>
 </div>
 
-<!-- CONTACT -->
 <div class="container hidden" id="contact">
-<button class="back" onclick="home()">← <span id="backTextContact"></span></button>
-<div class="card">
-<p id="contactInfo"></p>
-</div>
+<button class="back" id="backContact">← </button>
+<div class="card"><p id="contactInfo"></p></div>
 </div>
 
 <script>
+window.onload = function(){
 const ADMIN_WHATS="213660624409";
 
-// تعريف عناصر DOM
-const loginDiv = document.getElementById("login");
-const loginTitle = document.getElementById("loginTitle");
-const loginBtn = document.getElementById("loginBtn");
-const balLabel = document.getElementById("balLabel");
-const lvlLabel = document.getElementById("lvlLabel");
-const refLabel = document.getElementById("refLabel");
-const tasksText = document.getElementById("tasksText");
-const depositText = document.getElementById("depositText");
-const withdrawText = document.getElementById("withdrawText");
-const levelsText = document.getElementById("levelsText");
-const profileText = document.getElementById("profileText");
-const supportText = null; // لم تُستخدم
-const taskTitle = document.getElementById("taskTitle");
-const doTaskBtn = document.getElementById("doTaskBtn");
-const taskInfo = document.getElementById("taskInfo");
-const depositTitle = document.getElementById("depositTitle");
-const depositBtn = document.getElementById("depositBtn");
-const withdrawTitle = document.getElementById("withdrawTitle");
-const withdrawBtn = document.getElementById("withdrawBtn");
-const backText = document.getElementById("backText");
-const backText2 = document.getElementById("backText2");
-const backText3 = document.getElementById("backText3");
-const backText4 = document.getElementById("backText4");
-const backText5 = document.getElementById("backText5");
-const backTextAbout = document.getElementById("backTextAbout");
-const backTextContact = document.getElementById("backTextContact");
-const aboutContent = document.getElementById("aboutContent");
-const contactInfo = document.getElementById("contactInfo");
-const logoutText = document.getElementById("logoutText");
-const balance = document.getElementById("balance");
-const pLevel = document.getElementById("pLevel");
-const referrals = document.getElementById("referrals");
-const levelList = document.getElementById("levelList");
-const profileUser = document.getElementById("profileUser");
-const profileLevel = document.getElementById("profileLevel");
-const profileRefs = document.getElementById("profileRefs");
+let users=JSON.parse(localStorage.getItem("users")||"{}");
+let current=null;
 
-// الترجمات
+const levels=[
+{name:"المستوى التحفيزي",daily:50},
+{name:"المستوى الأول",daily:70},
+{name:"المستوى الثاني",daily:160},
+{name:"المستوى الثالث",daily:400},
+{name:"المستوى الرابع",daily:650},
+{name:"المستوى الخامس",daily:900},
+{name:"المستوى السادس",daily:1200}
+];
+
 const translations={
 ar:{login:"تسجيل الدخول",loginBtn:"دخول / تسجيل",bal:"رصيدك",lvl:"مستواك",refs:"إحالاتك",
-tasks:"المهام",deposit:"شحن",withdraw:"سحب",levels:"المستويات",profile:"ملفي",support:"الدعم",
+tasks:"المهام",deposit:"شحن",withdraw:"سحب",levels:"المستويات",profile:"ملفي",
 back:"رجوع",taskTitle:"المهمة اليومية",doTask:"تنفيذ المهمة",taskInfo:"مهمة واحدة كل 24 ساعة",
 depositTitle:"شحن الرصيد",depositBtn:"إرسال الطلب",
 withdrawTitle:"طلب سحب",withdrawBtn:"إرسال",
@@ -250,7 +143,7 @@ logoutText:"خروج",
 profileUser:"User: ",profileLevel:"Level: ",profileRefs:"Referrals: "
 },
 fr:{login:"Connexion",loginBtn:"Entrer / S'inscrire",bal:"Solde",lvl:"Niveau",refs:"Parrainages",
-tasks:"Tâches",deposit:"Dépôt",withdraw:"Retrait",levels:"Niveaux",profile:"Profil",support:"Support",
+tasks:"Tâches",deposit:"Dépôt",withdraw:"Retrait",levels:"Niveaux",profile:"Profil",
 back:"Retour",taskTitle:"Tâche quotidienne",doTask:"Exécuter",taskInfo:"Une tâche toutes les 24 heures",
 depositTitle:"Dépôt",depositBtn:"Envoyer",
 withdrawTitle:"Retrait",withdrawBtn:"Envoyer",
@@ -260,7 +153,7 @@ logoutText:"Déconnexion",
 profileUser:"Utilisateur: ",profileLevel:"Niveau: ",profileRefs:"Parrainages: "
 },
 en:{login:"Login",loginBtn:"Login / Register",bal:"Balance",lvl:"Level",refs:"Referrals",
-tasks:"Tasks",deposit:"Deposit",withdraw:"Withdraw",levels:"Levels",profile:"Profile",support:"Support",
+tasks:"Tasks",deposit:"Deposit",withdraw:"Withdraw",levels:"Levels",profile:"Profile",
 back:"Back",taskTitle:"Daily Task",doTask:"Execute",taskInfo:"One task every 24 hours",
 depositTitle:"Deposit",depositBtn:"Send",
 withdrawTitle:"Withdraw",withdrawBtn:"Send",
@@ -270,8 +163,11 @@ logoutText:"Logout",
 profileUser:"User: ",profileLevel:"Level: ",profileRefs:"Referrals: "
 };
 
-// تطبيق اللغة
 function setLang(l){localStorage.setItem("lang",l);applyLang(l);}
+document.getElementById("btnAR").onclick = ()=>setLang("ar");
+document.getElementById("btnFR").onclick = ()=>setLang("fr");
+document.getElementById("btnEN").onclick = ()=>setLang("en");
+
 function applyLang(l){
 document.documentElement.lang=l;
 document.documentElement.dir=l==="ar"?"rtl":"ltr";
@@ -303,30 +199,15 @@ backTextContact.innerText=t.back;
 aboutContent.innerText=t.aboutContent;
 contactInfo.innerText=t.contactInfo;
 logoutText.innerText=t.logoutText;
-profileUser.innerText=t.profileUser+current;
+profileUser.innerText=t.profileUser+(current?current:"");
 profileLevel.innerText=t.profileLevel+(current?levels[users[current].lvl].name:"");
 profileRefs.innerText=t.profileRefs+(current?users[current].refs.length:"");
 }
+
 applyLang(localStorage.getItem("lang")||"ar");
 
-// المستخدمون والمستويات
-let users=JSON.parse(localStorage.getItem("users")||"{}");
-let current=null;
-
-const levels=[
-{name:"المستوى التحفيزي",daily:50},
-{name:"المستوى الأول",daily:70},
-{name:"المستوى الثاني",daily:160},
-{name:"المستوى الثالث",daily:400},
-{name:"المستوى الرابع",daily:650},
-{name:"المستوى الخامس",daily:900},
-{name:"المستوى السادس",daily:1200}
-];
-
-// وظائف
-loginBtn.onclick = login;
-
-function login(){
+// تسجيل الدخول
+loginBtn.onclick = function(){
 let u=document.getElementById("u").value.trim();
 let p=document.getElementById("p").value;
 if(!u||!p) return alert("Fill data");
@@ -335,48 +216,47 @@ if(users[u].p!==p) return alert("Wrong password");
 current=u;
 localStorage.setItem("users",JSON.stringify(users));
 loginDiv.classList.add("hidden");
-homeDiv.classList.remove("hidden");
+document.getElementById("home").classList.remove("hidden");
 update();
 renderLevels();
 applyLang(localStorage.getItem("lang")||"ar");
 }
 
+// الوظائف الأساسية
 function update(){
 balance.innerText=users[current].bal+" DA";
 pLevel.innerText=levels[users[current].lvl].name;
 referrals.innerText=users[current].refs.length;
-profileUser.innerText=translations[localStorage.getItem("lang")||"ar"].profileUser+current;
-profileLevel.innerText=translations[localStorage.getItem("lang")||"ar"].profileLevel+levels[users[current].lvl].name;
-profileRefs.innerText=translations[localStorage.getItem("lang")||"ar"].profileRefs+users[current].refs.length;
+applyLang(localStorage.getItem("lang")||"ar");
 localStorage.setItem("users",JSON.stringify(users));
 }
 
 function openPage(id){
 document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));
 document.getElementById(id).classList.remove("hidden");
-if(id==="levels") renderLevels();
 applyLang(localStorage.getItem("lang")||"ar");
+if(id==="levels") renderLevels();
 }
-
 function home(){openPage("home");}
-
-function doTask(){
-let t=new Date().toDateString();
-if(users[current].task===t) return alert("Already done");
-users[current].task=t;
-users[current].bal+=levels[users[current].lvl].daily;
-update();
-}
-
+function doTask(){let t=new Date().toDateString(); if(users[current].task===t) return alert("Already done"); users[current].task=t; users[current].bal+=levels[users[current].lvl].daily; update();}
 function deposit(){ window.open(`https://wa.me/${ADMIN_WHATS}`); }
 function withdraw(){ window.open(`https://wa.me/${ADMIN_WHATS}`); }
+document.getElementById("iconTasks").onclick = ()=>openPage("tasks");
+document.getElementById("iconDeposit").onclick = ()=>openPage("deposit");
+document.getElementById("iconWithdraw").onclick = ()=>openPage("withdraw");
+document.getElementById("iconLevels").onclick = ()=>openPage("levels");
+document.getElementById("iconProfile").onclick = ()=>openPage("profile");
+document.getElementById("iconAbout").onclick = ()=>openPage("about");
+document.getElementById("iconContact").onclick = ()=>openPage("contact");
+document.getElementById("iconLogout").onclick = ()=>{current=null; loginDiv.classList.remove("hidden"); document.getElementById("home").classList.add("hidden"); applyLang(localStorage.getItem("lang")||"ar");}
 
-function logout(){
-current=null;
-homeDiv.classList.add("hidden");
-loginDiv.classList.remove("hidden");
-applyLang(localStorage.getItem("lang")||"ar");
-}
+document.getElementById("backTasks").onclick = home;
+document.getElementById("backDeposit").onclick = home;
+document.getElementById("backWithdraw").onclick = home;
+document.getElementById("backLevels").onclick = home;
+document.getElementById("backProfile").onclick = home;
+document.getElementById("backAbout").onclick = home;
+document.getElementById("backContact").onclick = home;
 
 function renderLevels(){
 levelList.innerHTML="";
@@ -384,6 +264,8 @@ levels.forEach(l=>{
 levelList.innerHTML+=`<div class="card"><h3>${l.name}</h3><p>ربح المهمة اليومية: ${l.daily} دج</p><p>كل 24 ساعة مهمة واحدة</p></div>`;
 });
 }
+
+};
 </script>
 
 </body>
