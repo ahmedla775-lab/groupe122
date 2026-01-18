@@ -42,7 +42,7 @@ header {
 }
 .icon i {
   font-size: 34px;
-  color: #FFD700;
+  color: #FFD700; /* ذهبي */
   margin-bottom: 10px;
 }
 .icon p { font-size: 16px; }
@@ -85,6 +85,7 @@ h3 { font-size: 22px; text-align: center; }
 p { line-height: 1.6; }
 </style>
 </head>
+
 <body>
 
 <header>
@@ -103,7 +104,7 @@ p { line-height: 1.6; }
 <input id="u" placeholder="Username">
 <input id="p" type="password" placeholder="Password">
 <input id="ref" placeholder="Referral code (optional)">
-<button class="main" id="loginBtn" onclick="login()"></button>
+<button class="main" id="loginBtn"></button>
 </div>
 </div>
 
@@ -133,7 +134,7 @@ p { line-height: 1.6; }
 <div class="card">
 <h3 id="taskTitle"></h3>
 <p>مهمة واحدة كل 24 ساعة</p>
-<button class="main" id="doTaskBtn" onclick="doTask()"></button>
+<button class="main" id="doTaskBtn"></button>
 </div>
 </div>
 
@@ -147,7 +148,7 @@ p { line-height: 1.6; }
 <option>DZD</option>
 </select>
 <input id="dAmount" type="number" placeholder="Amount">
-<button class="main" id="depositBtn" onclick="deposit()"></button>
+<button class="main" id="depositBtn"></button>
 </div>
 </div>
 
@@ -157,7 +158,7 @@ p { line-height: 1.6; }
 <div class="card">
 <h3 id="withdrawTitle"></h3>
 <input id="wAmount" type="number" placeholder="Amount">
-<button class="main" id="withdrawBtn" onclick="withdraw()"></button>
+<button class="main" id="withdrawBtn"></button>
 </div>
 </div>
 
@@ -195,6 +196,8 @@ p { line-height: 1.6; }
 </div>
 
 <script>
+window.addEventListener('DOMContentLoaded', () => {
+
 const ADMIN_WHATS="213660624409";
 
 const translations={
@@ -215,6 +218,22 @@ depositTitle:"Deposit",depositBtn:"Send",
 withdrawTitle:"Withdraw",withdrawBtn:"Send"}
 };
 
+const loginDiv = document.getElementById("login");
+const homeDiv = document.getElementById("home");
+const levelList = document.getElementById("levelList");
+const balance = document.getElementById("balance");
+const pLevel = document.getElementById("pLevel");
+const referrals = document.getElementById("referrals");
+const pName = document.getElementById("pName");
+const pLvl = document.getElementById("pLvl");
+const pRefs = document.getElementById("pRefs");
+const loginTitle = document.getElementById("loginTitle");
+const loginBtn = document.getElementById("loginBtn");
+const tasksText = document.getElementById("tasksText");
+const depositText = document.getElementById("depositText");
+const withdrawText = document.getElementById("withdrawText");
+const levelsText = document.getElementById("levelsText");
+
 function setLang(l){localStorage.setItem("lang",l);applyLang(l);}
 function applyLang(l){
 document.documentElement.lang=l;
@@ -222,26 +241,24 @@ document.documentElement.dir=l==="ar"?"rtl":"ltr";
 const t=translations[l];
 loginTitle.innerText=t.login;
 loginBtn.innerText=t.loginBtn;
-balLabel.innerText=t.bal;
-lvlLabel.innerText=t.lvl;
-refLabel.innerText=t.refs;
+document.getElementById("balLabel").innerText=t.bal;
+document.getElementById("lvlLabel").innerText=t.lvl;
+document.getElementById("refLabel").innerText=t.refs;
 tasksText.innerText=t.tasks;
 depositText.innerText=t.deposit;
 withdrawText.innerText=t.withdraw;
 levelsText.innerText=t.levels;
-profileText.innerText=t.profile;
-supportText.innerText=t.support;
-taskTitle.innerText=t.taskTitle;
-doTaskBtn.innerText=t.doTask;
-depositTitle.innerText=t.depositTitle;
-depositBtn.innerText=t.depositBtn;
-withdrawTitle.innerText=t.withdrawTitle;
-withdrawBtn.innerText=t.withdrawBtn;
-backText.innerText=t.back;
-backText2.innerText=t.back;
-backText3.innerText=t.back;
-backText4.innerText=t.back;
-backText5.innerText=t.back;
+document.getElementById("taskTitle").innerText=t.taskTitle;
+document.getElementById("doTaskBtn").innerText=t.doTask;
+document.getElementById("depositTitle").innerText=t.depositTitle;
+document.getElementById("depositBtn").innerText=t.depositBtn;
+document.getElementById("withdrawTitle").innerText=t.withdrawTitle;
+document.getElementById("withdrawBtn").innerText=t.withdrawBtn;
+document.getElementById("backText").innerText=t.back;
+document.getElementById("backText2").innerText=t.back;
+document.getElementById("backText3").innerText=t.back;
+document.getElementById("backText4").innerText=t.back;
+document.getElementById("backText5").innerText=t.back;
 }
 applyLang(localStorage.getItem("lang")||"ar");
 
@@ -258,90 +275,69 @@ const levels=[
 {name:"المستوى السادس",daily:1200}
 ];
 
-// DOM elements
-const loginDiv = document.getElementById("login");
-const homeDiv = document.getElementById("home");
-const levelList = document.getElementById("levelList");
-const balance = document.getElementById("balance");
-const pLevel = document.getElementById("pLevel");
-const referrals = document.getElementById("referrals");
-const pName = document.getElementById("pName");
-const pLvl = document.getElementById("pLvl");
-const pRefs = document.getElementById("pRefs");
-const loginTitle = document.getElementById("loginTitle");
-const loginBtn = document.getElementById("loginBtn");
-const tasksText = document.getElementById("tasksText");
-const depositText = document.getElementById("depositText");
-const withdrawText = document.getElementById("withdrawText");
-const levelsText = document.getElementById("levelsText");
-const profileText = document.getElementById("profileText");
-const supportText = document.getElementById("supportText");
-const taskTitle = document.getElementById("taskTitle");
-const doTaskBtn = document.getElementById("doTaskBtn");
-const depositTitle = document.getElementById("depositTitle");
-const depositBtn = document.getElementById("depositBtn");
-const withdrawTitle = document.getElementById("withdrawTitle");
-const withdrawBtn = document.getElementById("withdrawBtn");
-const backText = document.getElementById("backText");
-const backText2 = document.getElementById("backText2");
-const backText3 = document.getElementById("backText3");
-const backText4 = document.getElementById("backText4");
-const backText5 = document.getElementById("backText5");
-
-// Functions
-function login(){
-  let u = document.getElementById("u").value.trim();
-  let p = document.getElementById("p").value;
-  if(!u || !p) return alert("Fill data");
-  if(!users[u]) users[u]={p,bal:0,lvl:0,refs:[],task:""};
-  if(users[u].p !== p) return alert("Wrong password");
-  current = u;
-  localStorage.setItem("users",JSON.stringify(users));
-  loginDiv.classList.add("hidden");
-  homeDiv.classList.remove("hidden");
-  update();
-  renderLevels();
+function loginFunc(){
+const u=document.getElementById("u").value.trim();
+const p=document.getElementById("p").value;
+if(!u||!p) return alert("Fill data");
+if(!users[u]) users[u]={p,bal:0,lvl:0,refs:[],task:""};
+if(users[u].p!==p) return alert("Wrong password");
+current=u;
+localStorage.setItem("users",JSON.stringify(users));
+loginDiv.classList.add("hidden");
+homeDiv.classList.remove("hidden");
+update();
+renderLevels();
 }
 
 function update(){
-  balance.innerText = users[current].bal + " DA";
-  pLevel.innerText = levels[users[current].lvl].name;
-  referrals.innerText = users[current].refs.length;
-  pName.innerText = current;
-  pLvl.innerText = levels[users[current].lvl].name;
-  pRefs.innerText = users[current].refs.length;
-  localStorage.setItem("users",JSON.stringify(users));
+balance.innerText=users[current].bal+" DA";
+pLevel.innerText=levels[users[current].lvl].name;
+referrals.innerText=users[current].refs.length;
+pName.innerText=current;
+pLvl.innerText=levels[users[current].lvl].name;
+pRefs.innerText=users[current].refs.length;
+localStorage.setItem("users",JSON.stringify(users));
 }
 
 function openPage(id){
-  document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));
-  document.getElementById(id).classList.remove("hidden");
-  if(id==="levels") renderLevels();
+document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));
+document.getElementById(id).classList.remove("hidden");
+if(id==="levels") renderLevels();
 }
 function home(){openPage("home");}
 
 function doTask(){
-  let t = new Date().toDateString();
-  if(users[current].task === t) return alert("Already done");
-  users[current].task = t;
-  users[current].bal += levels[users[current].lvl].daily;
-  update();
+let t=new Date().toDateString();
+if(users[current].task===t) return alert("Already done");
+users[current].task=t;
+users[current].bal+=levels[users[current].lvl].daily;
+update();
 }
 
 function deposit(){ window.open(`https://wa.me/${ADMIN_WHATS}`); }
 function withdraw(){ window.open(`https://wa.me/${ADMIN_WHATS}`); }
+
 function logout(){
-  current = null;
-  homeDiv.classList.add("hidden");
-  loginDiv.classList.remove("hidden");
+current=null;
+homeDiv.classList.add("hidden");
+loginDiv.classList.remove("hidden");
 }
 
 function renderLevels(){
-  levelList.innerHTML = "";
-  levels.forEach(l=>{
-    levelList.innerHTML += `<div class="card"><h3>${l.name}</h3><p>ربح المهمة اليومية: ${l.daily} دج</p><p>كل 24 ساعة مهمة واحدة</p></div>`;
-  });
+levelList.innerHTML="";
+levels.forEach(l=>{
+levelList.innerHTML+=`<div class="card"><h3>${l.name}</h3><p>ربح المهمة اليومية: ${l.daily} دج</p><p>كل 24 ساعة مهمة واحدة</p></div>`;
+});
+
+// اختياري: scroll to top
+levelList.scrollTop = 0;
 }
+
+// ربط الزر
+loginBtn.addEventListener("click", loginFunc);
+
+});
 </script>
+
 </body>
 </html>
